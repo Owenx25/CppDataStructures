@@ -1,0 +1,11 @@
+Array
+======
+- Ex. 
+Data:    [1, 2, 3, 4]
+Index:    0  1  2  3
+
+- Arrays are used for tons of different operations and the creation of other data structures
+- An array represents a continuous block of memory, each "cell" takes up a certain amount of memory
+- Each cell can be accessed by an "index" which may start at 0 or 1 and refers to the ith element
+
+
