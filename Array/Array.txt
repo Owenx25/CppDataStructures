@@ -1,0 +1,22 @@
+Array
+======
+- Ex. 
+Data:    [1, 2, 3, 4]
+Index:    0  1  2  3
+
+- Arrays are used for tons of different operations and the creation of other data structures
+- An array represents a continuous block of memory, each "cell" takes up a certain amount of memory
+- Each cell can be accessed by an "index" which may start at 0 or 1 and refers to the ith element
+
+
+Regular Array vs. Dynamic:
+- Dynamic arrays have the ability to grow and shrink outside of their initialized bounds
+- This makes operations like insert/delete possible but are slower compared to linked lists(O(n) vs O(1))
+
+Efficiency:
+- Indexing an array takes O(1) time since only a small calculation is needed to get the memory address
+
+When to Use:
+- Arrays are best used when you have large sets of data that you are primarily ACCESSING elements
+- DON'T use arrays when you have a data set with many INSERTIONS or DELETIONS
+	- this is because shifting elements is needed for these operations which takes O(n) time

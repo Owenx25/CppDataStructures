@@ -13,6 +13,7 @@ class Array{
 		ArrayType& operator[](int index);
 		void operator=(const ArrayType& other);
 		Array(int size);
+		Array();
 		int get_size();
 		ArrayType element_at(int index);
 };
@@ -24,12 +25,18 @@ int Array<ArrayType>::get_size() {
 }
 
 template<class ArrayType>
+Array<ArrayType>::Array()
+{
+	throw "Trying to init empty array";
+}
+
+template<class ArrayType>
 Array<ArrayType>::Array(int size)
 {
 	this->size = size;
 	startptr = new ArrayType[size]();
 	if (startptr == NULL)
-		exit(1);
+		throw "could not allocate memory";
 }
 
 template<class ArrayType>
@@ -37,8 +44,7 @@ ArrayType& Array<ArrayType>::operator[](int index)
 {
 	if (index > size || index < 0)
 	{
-		cout << "Index out of range";
-		exit(1);
+		throw "Index out of range";
 	}
 
 	return *(startptr + index);
