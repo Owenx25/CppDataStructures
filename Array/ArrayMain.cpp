@@ -5,58 +5,57 @@
 using namespace std;
 
 int main() {
-	// Int Array
+	// Test: Normal Int Array
+	// Expect: 1,2,3,4,5
 	Array<int> IntArr(5);
-
 	for (int i = 0; i < IntArr.get_size(); i++)
 	{
 		IntArr[i] = i;
 		cout << "[" << i << "] = " << IntArr[i] << endl;
 	}
-	// Expect 1,2,3,4,5
-
 	cout << endl;
 
-	// Double Array
+	// Test: Normal Double Array
+	// Expect some big double numbers
 	Array<double> DoubArr(20);
 	for (int i = 0; i < DoubArr.get_size(); i++)
 	{
-		try {
-			DoubArr[i] = i * 992012.32142;
-			if (DoubArr[i] != 992012.32142 * i)
-				throw "double size off";
-		}
-		catch (exception e)
-		{
-			cout << "caught exception: " << e.what();
-		}
+		DoubArr[i] = i * 992012.32142;
 		cout << "[" << i << "] = " << DoubArr[i] << endl;
-	}
-	// Expect some big double numbers
-
+	}	
 	cout << endl;
 
-	// String Array
+	// Test: Normal String Array
+	// Expect: "1","2","3","4","5"
 	Array<string> StringArr(5);
-
 	for (int i = 0; i < 5; i++)
 	{
 		StringArr[i] = "\"" + to_string(i) + "\"";
 		cout << "[" << i << "] = " << StringArr[i] << endl;
 	}
-	// Expect "1","2","3","4","5"
-
 	cout << endl;
-
-	// Invalid Initialization
+	
+	// Test: Invalid Index Access
+	// Expect: 2 Index out of range exceptions
+	Array<int> BadArr1(5);
+	for (int i = 0; i < 5; i++)
+		BadArr1[i] = i;
 	try {
-		Array<int> BadArr;
+		cout << BadArr1[5];
 	}
-	catch (...) {
-		cout << "caught exception" << endl;
-		exit(1);
+	catch (exception& e) {
+		cout << "caught exception: " << e.what() << endl;
 	}
-	//Expect catch
+	try {
+		cout << BadArr1[-3];
+	}
+	catch (exception& e) {
+		cout << "caught exception: " << e.what() << endl;
+	}
+	
 
+	// Test: Invalid Initialization
+	// Expect: Error on compilation
+	//Array<int> BadArr2;
 	return 0;
 }
