@@ -1,6 +1,7 @@
 // Singly Linked List
 #include <iostream>
 #include <string>
+#include <stdexcept>
 
 using namespace std;
 
@@ -41,7 +42,7 @@ class LinkedList {
 	// Default constructor
 	LinkedList();
 	// One Node Constructor
-	LinkedList(Node<T> newNode);
+	LinkedList(Node<T>* newNode);
 };
 
 template<typename T>
@@ -57,6 +58,7 @@ int LinkedList<T>::Get_size() {
 
 template<class T>
 T LinkedList<T>::Front() {
+	//cout << head->data << "\t" << *head->data << endl;
 	return head->data;
 }
 
@@ -67,20 +69,22 @@ LinkedList<T>::LinkedList() {
 }
 
 template<class T>
-LinkedList<T>::LinkedList(Node<T> newNode) {
-	head = &newNode;
+LinkedList<T>::LinkedList(Node<T>* newNode) {
+	head = newNode;
 	size = 1;
 }
 
 template<typename T>
 Node<T>::Node(T data, Node<T>* next) {
 	this->data = data;
-	this.next = next;
+	this->next = next;
 }
 
 template<class T>
 void LinkedList<T>::Pop_front() {
-	head = head->next;
+	Node<T>* oldHead = &head;
+	head = head.next;
+	delete oldHead;
 }
 
 template<class T>
@@ -91,8 +95,8 @@ T* LinkedList<T>::Insert_at(int index, T data) {
 	if (index == 0)
 		Push_front(data);
 	else {
-		Node currNode = head;
-		Node newNode = (data, NULL);
+		Node currNode = *head;
+		Node newNode = (&data, NULL);
 		while (index - 1 >= 0)
 		{
 			currNode = head->next;
@@ -107,33 +111,35 @@ T* LinkedList<T>::Insert_at(int index, T data) {
 template<class T>
 void LinkedList<T>::Push_front(T data) {
 	if (size > 0) {
-		Node<T> newNode(data, head);
-		head = &newNode;
+		Node<T>* newNode = new Node<T>;
+		newNode->data = data;
+		head = newNode;
 		size++;
 	} else if (size == 0){
+		//cout << "My data is: {" << data << "} at addr " << &data << endl;
 		head = new Node<T>(data, NULL);
 		size++;
 	} else {
-		throw runtime_exception("Invalid size of list");
+		throw runtime_error("Invalid size of list");
 	}
 }
 
 template<class T>
 T* LinkedList<T>::Push_back(T data) {
 	if (size > 0) {
-		Node currNode = head;
-		Node newNode = new Node(data, NULL);
+		Node<T> currNode = *head;
+		Node<T> newNode = new Node<T>(&data, NULL);
 		while (currNode->next != NULL)
 			currNode = head->next;
 		currNode.next = &newNode;
 		size++;
 		return &newNode;
 	} else if (size == 0){
-		head = new Node(data, NULL);
+		head = new Node(&data, NULL);
 		size++;
 		return &head;
 	} else {
-		throw runtime_exception("Invalid size of list");
+		throw runtime_error("Invalid size of list");
 	}
 }
 
