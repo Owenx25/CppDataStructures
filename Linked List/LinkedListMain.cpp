@@ -3,10 +3,10 @@
 
 using namespace std;
 
-void printList(LinkedList<int> test) {
+void printList(LinkedList<int> list) {
 	cout << "{";
-	for (int i = 0; i < test.Get_size(); i++)
-		cout << " " << test.Element_at(i) << " ";
+	for (int i = 0; i < list.Get_size(); i++)
+		cout << " " << list.Element_at(i) << " ";
 	cout << "}\n";
 }
 
