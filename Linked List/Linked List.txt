@@ -1,11 +1,31 @@
 Linked List
 ============
-- A list of objects that are attached via pointers, they are not always continuous in memory
 - ex. 2 -> 5 -> 7 -> 9 -> NULL
 
-- Very good O(1) time for insertions/deletions
+- A list of objects that are attached via pointers
+	- Since objects are attached via pointers, each node can be anywhere in memory
+- Uses MORE memory than array because each node needs to hold DATA and NEXT
+- Not requried to define SIZE on initialization
+- Bad Cache locality
+
+Variants:
+- Singly linked
+	- each node points to the NEXT node
+- Doubly linked
+	- each node points to the NEXT and PREV nodes
+- Multiply linked
+	- each node points to some number of nodes
+- Circular linked
+	- TAIL points back the the HEAD
+
+Efficiency:
+- O(1) time for insertions/deletions at front(Back too if it has tail)
 	- this is because pointers only need to be updated, no shifting
-- Variants include singly linked, doubly linked, multiply linked, circular linked
-- Access time is slow O(n) since the list had to be traversed, elements can't be accessed directly like an array
-- Bad Cache locality(Memory locations all spread out)
-- Don't have to define a size on init
+- Search time + O(1) for insertion at any other index
+- Access time is slow O(n) since the list always has to be traversed, elements can't be accessed directly like an array
+
+When to Use:
+- Linked Lists are best for data that is rapidly CHANGING meaning lots of insertions, deletions
+	- especially if they are usually at the front or back
+- DON'T use linked lists with a data set that rarely changes and is commonly accessed
+	- every access takes linear time

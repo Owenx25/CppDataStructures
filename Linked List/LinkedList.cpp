@@ -29,6 +29,8 @@ class LinkedList {
 	T Front();
 	// get an element at a specific index
 	T Element_at(int index);
+	// check if empty
+	bool Is_empty();
 	// Insert a new node at an index
 	Node<T>* Insert_at(int index, T data);
 	// Add Node to end of list
@@ -37,7 +39,7 @@ class LinkedList {
 	void Push_front(T data);
 	// Remove Node from start
 	void Pop_front();
-	// Remove Node from an index
+	// Remove Node at an index
 	void Delete_at(int index);
 	// return size
 	int Get_size();
@@ -113,6 +115,11 @@ template<typename T>
 Node<T>::Node(T data, Node<T>* next) {
 	this->data = data;
 	this->next = next;
+}
+
+template<class T>
+bool LinkedList<T>::Is_empty() {
+	return head == NULL;
 }
 
 template<class T>

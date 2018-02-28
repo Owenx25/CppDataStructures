@@ -41,6 +41,7 @@ int main() {
 	
 	//LL<string> test
 	LinkedList<string> test2;
+	cout << "Empty? " << test2.Is_empty() << endl;
 	test2.Push_back("Owen");
 	test2.Push_back("Wilson");
 	test2.Push_back("Jocelyn");
@@ -48,6 +49,7 @@ int main() {
 	test2.Push_back("Estelle");
 	test2.Push_back("Bingo");
 	printList<string>(test2);
+	cout << "Empty? " << test2.Is_empty();
 	
 	return 0;
 }
