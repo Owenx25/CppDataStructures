@@ -45,6 +45,8 @@ class LinkedList {
 	LinkedList();
 	// One Node Constructor
 	LinkedList(Node<T>* newNode);
+	// Destructor
+	~LinkedList();
 };
 
 template<typename T>
@@ -84,6 +86,21 @@ template<class T>
 LinkedList<T>::LinkedList() {
 	head = NULL;
 	size = 0;
+}
+
+template<class T>
+LinkedList<T>::~LinkedList() {
+	if (head != NULL)
+	{
+		Node<T>* tempNode = head;
+		while (tempNode->next != NULL)
+		{
+			Node<T>* delNode = tempNode;
+			tempNode = tempNode->next;
+			delete delNode->next;
+			delete delNode;
+		}
+	}
 }
 
 template<class T>
@@ -162,7 +179,7 @@ Node<T>* LinkedList<T>::Push_back(T data) {
 		Node<T>* currNode = head;
 		Node<T>* newNode = new Node<T>(data, NULL);
 		while (currNode->next != NULL)
-			currNode = head->next;
+			currNode = currNode->next;
 		currNode->next = newNode;
 		size++;
 		return newNode;
