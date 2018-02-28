@@ -3,26 +3,44 @@
 
 using namespace std;
 
+void printList(LinkedList<int> test) {
+	cout << "{";
+	for (int i = 0; i < test.Get_size(); i++)
+		cout << " " << test.Element_at(i) << " ";
+	cout << "}\n";
+}
+
 int main() {
 	LinkedList<int> test;
-	cout << "Size before anything: " << test.Get_size() << endl;
-	int data = 1;
+	cout << "push 1\n";
 	test.Push_front(1);
-	cout << "Size after pushing {1}: " << test.Get_size() << endl;
-	cout << "Front: " << test.Front() << endl;
+	printList(test);
+	// { 1 }
+	cout << "push 2\n";
 	test.Push_front(2);
-	cout << "Size after pushing front {2}: " << test.Get_size() << endl;
+	printList(test);
+	// { 2, 1 }
+	cout << "push back 3\n";
 	test.Push_back(3);
-	cout << "Front: " << test.Front() << endl;
-	cout << "Size after pushing back {3}: " << test.Get_size() << endl;
-	cout << "Front: " << test.Front() << endl;
-	cout << "Element at [2]: " << test.Element_at(2) << endl;
+	printList(test);
+	// { 2, 1, 3}
 	try {
 		cout << "Element at [7]: " << test.Element_at(7) << endl;
 	} catch(exception e) {
 		cout << "Caught exception: " << e.what() << endl;
 	}
-	
+	cout << "insert 4 at [1]\n";
+	test.Insert_at(1, 4);
+	printList(test);
+	// { 2, 4, 1, 3}
+	cout << "pop front\n";
+	test.Pop_front();
+	printList(test);
+	// { 4 , 1, 3}
+	cout << "delete element at [1]\n";
+	test.Delete_at(1);
+	printList(test);
+	// { 4, 3}
 	
 	return 0;
 }

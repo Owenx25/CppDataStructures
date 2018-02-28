@@ -38,7 +38,7 @@ class LinkedList {
 	// Remove Node from start
 	void Pop_front();
 	// Remove Node from an index
-	//T Delete_at(int index);
+	void Delete_at(int index);
 	// return size
 	int Get_size();
 	// Default constructor
@@ -68,7 +68,7 @@ T LinkedList<T>::Element_at(int index) {
 	if (index < 0 || index >= size)
 		throw runtime_error("bad index in element_at()");
 	if (index == 0)
-		Front();
+		return Front();
 	else {
 		Node<T>* tempNode = head;
 		for (int i = 0; i < index; i++)
@@ -77,6 +77,7 @@ T LinkedList<T>::Element_at(int index) {
 		}
 		return tempNode->data;
 	}
+	return NULL;
 }
 
 template<class T>
@@ -99,31 +100,47 @@ Node<T>::Node(T data, Node<T>* next) {
 
 template<class T>
 void LinkedList<T>::Pop_front() {
-	Node<T>* oldHead = &head;
-	head = head.->next;
+	Node<T>* oldHead = head;
+	head = head->next;
+	size--;
 	delete oldHead;
+}
+
+template<class T>
+void LinkedList<T>::Delete_at(int index) {
+	if (index < 0 || index >= size)
+		throw runtime_error("Bad Index in Insert_at()");
+	if (index == 0)
+		Pop_front();
+	else
+	{
+		Node<T>* currNode = head;
+		for (int i = 0; i < index - 1; ++i)
+			currNode = head->next;
+		Node<T>* skipNode = currNode->next;
+		currNode->next = skipNode->next;
+		size--;
+		delete skipNode;
+	}
 }
 
 template<class T>
 Node<T>* LinkedList<T>::Insert_at(int index, T data) {
 	if (index < 0 || index >= size)
-		throw runtime_exception("Bad Index");
-	
+		throw runtime_error("Bad Index in Insert_at()");
 	if (index == 0)
 		Push_front(data);
 	else {
-		Node<T> currNode = *head;
-		Node<T>* p_newNode = new Node<T>(data, NULL);
-		while (index - 1 >= 0)
-		{
+		Node<T>* currNode = head;
+		for (int i = 0; i < index - 1; ++i)
 			currNode = head->next;
-			index--;
-		}
 		// Should be 1 before where we want to insert
-		p_newNode->next = currNode->next;
-		currNode->next = p_newNode;
+		Node<T>* newNode = new Node<T>(data, currNode->next);
+		currNode->next = newNode;
 		size++;
+		return newNode;
 	}
+	return head;
 }
 
 template<class T>
