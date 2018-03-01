@@ -1,0 +1,16 @@
+Stack
+======
+- ex. 1  => pop => 3 --> ret 1
+      3            5
+      5            7
+      7
+
+- A vertical representation of data where all interactions are based around the "top" element
+	- PUSH adds a new element to the top, covering the old top
+	- PEEK returns the current element at the top
+	- POP removes the top element and returns it
+- Also referred to as Last In, First Out or LIFO
+- Can be Implemented with Array or Linked List
+	- It seems better with a LL because inserts/deletions at the head are O(1)
+- Commonly used to allocate and access memory
+- can also be used for back tracking
