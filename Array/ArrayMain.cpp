@@ -8,7 +8,7 @@ int main() {
 	// Test: Normal Int Array
 	// Expect: 1,2,3,4,5
 	Array<int> IntArr(5);
-	for (int i = 0; i < IntArr.get_size(); i++)
+	for (int i = 0; i < IntArr.Get_size(); i++)
 	{
 		IntArr[i] = i;
 		cout << "[" << i << "] = " << IntArr[i] << endl;
@@ -18,7 +18,7 @@ int main() {
 	// Test: Normal Double Array
 	// Expect some big double numbers
 	Array<double> DoubArr(20);
-	for (int i = 0; i < DoubArr.get_size(); i++)
+	for (int i = 0; i < DoubArr.Get_size(); i++)
 	{
 		DoubArr[i] = i * 992012.32142;
 		cout << "[" << i << "] = " << DoubArr[i] << endl;
