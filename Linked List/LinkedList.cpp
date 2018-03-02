@@ -61,7 +61,6 @@ Node<T>::Node() {
 
 template<class T>
 LinkedList<T>::LinkedList(const LinkedList& copyList) {
-	head = new Node<T>(copyList.Front(), NULL);
 	size = 0;
 	for (int i = 0; i < copyList.Get_size(); i++)
 	{
