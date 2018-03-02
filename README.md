@@ -1,2 +1,2 @@
-# DataStructures
-Just some classic homemade C++ data structures that I can review from time to time
+# C++ Data Structurs
+Template implementation of some important Data Structures in C++
