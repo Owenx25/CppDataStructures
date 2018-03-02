@@ -1,0 +1,9 @@
+Queue
+======
+- ex. { 2 4 6 8 } ==> enqueue 5 ==> { 5 2 4 6 8 } ==> dequeue ==> { 5 2 4 6 }
+
+- elements are added to one end of the list(LHS in the example) and removed from the opposite end of the list(RHS)
+- First in, First out (FIFO)
+- Doubly Linked list is probably the best implementations because it can access both sides in O(1) time
+- Very useful for making a list information that needs to be processed but not immediately
+	- like doing a breadth-first search or transferring data asynchronously

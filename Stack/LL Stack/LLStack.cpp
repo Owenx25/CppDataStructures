@@ -1,5 +1,5 @@
 // Stack
-#include "LinkedList.cpp"
+#include "..\..\Linked List\LinkedList.cpp"
 
 using namespace std;
 

@@ -11,6 +11,6 @@ Stack
 	- POP removes the top element and returns it
 - Also referred to as Last In, First Out or LIFO
 - Can be Implemented with Array or Linked List
-	- It seems better with a LL because inserts/deletions at the head are O(1)
+	- It seems better with a LL because inserts/deletions at the head are O(1) and list is unbounded
 - Commonly used to allocate and access memory
 - can also be used for back tracking

@@ -1,5 +1,5 @@
 // Stack
-#include "Array.cpp"
+#include "..\..\Array\Array.cpp"
 
 using namespace std;
 
