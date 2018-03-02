@@ -7,3 +7,8 @@ Queue
 - Doubly Linked list is probably the best implementations because it can access both sides in O(1) time
 - Very useful for making a list information that needs to be processed but not immediately
 	- like doing a breadth-first search or transferring data asynchronously
+
+Variants:
+- Priority Queue
+	- each element has priority associated with it
+- Deque (Double-Ended Queue)

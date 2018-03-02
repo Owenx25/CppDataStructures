@@ -24,7 +24,6 @@ int main () {
 	assert(test.Get_size() == 3);
 	assert(test.Front() == 33);
 	assert(test.Back() == 55);
-	
 	cout << test;
 	
 	// String test

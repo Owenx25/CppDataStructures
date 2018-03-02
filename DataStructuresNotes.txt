@@ -2,13 +2,15 @@ List of Important Data Structures
 ==================================
 - Array
 - Linked List
-- Binary Tree
-- BST
-- Graphs
 - Stack
 - Queue
-- Priority Queue
 - Heap
+- Binary Tree
+- Priority Queue
+- BST
+- Graphs
+
+
 - Hash Table
 
 Bonus Variants:

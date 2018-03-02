@@ -1,0 +1,15 @@
+Binary Tree
+============
+- ex.    6
+        / \
+       5   3
+      /   / \
+     8   1   4
+
+- Tree data structure where each node has at most 2 children
+- Binary trees can be BALANCED or UNBALANCED meaning every node has exactly 2 children
+- Can be implemented like a LL or with an Array
+
+Properties:
+- Nodes in a full BT is at least {2 * Height + 1} and at most {2^(Height + 1) - 1}
+- # of leaf nodes in a perfect BT is (nodes + 1) / 2 
