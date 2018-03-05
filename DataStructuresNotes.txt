@@ -15,6 +15,7 @@ List of Important Data Structures
 
 Bonus Variants:
 - Circular Array
+- Array Implemented Binary Tree
 
 Rules: 
 - Once a week read up on a DS and implement it in C++
