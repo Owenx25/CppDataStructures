@@ -40,6 +40,9 @@ public:
 	bool Has_right(Node<T>* node) const;
 	// need to make sure not ambiguous
 	void Delete_node(Node<T>* delNode);
+	void Print_pre_order(Node<T>* node);
+	void Print_in_order(Node<T>* node);
+	void Print_post_order(Node<T>* node);
 };
 
 // Node Constructors
@@ -63,9 +66,7 @@ BinaryTree<T>::BinaryTree(){}
 
 // Destructor
 template<class T>
-BinaryTree<T>::~BinaryTree() {
-	Delete_traverse(root);
-}
+BinaryTree<T>::~BinaryTree() { Delete_traverse(root); }
 template<class T>
 void BinaryTree<T>::Delete_traverse(Node<T>* node) {
 	if (node == NULL)
@@ -73,6 +74,32 @@ void BinaryTree<T>::Delete_traverse(Node<T>* node) {
 	Delete_traverse(node->childLeft);
 	Delete_traverse(node->childRight);
 	delete node;
+}
+
+// Print loops
+template<class T>
+void BinaryTree<T>::Print_pre_order(Node<T>* node) {
+	if (node == NULL)
+		return;
+	cout << node->data << " ";
+	Print_pre_order(node->childLeft);
+	Print_pre_order(node->childRight);
+}
+template<class T>
+void BinaryTree<T>::Print_in_order(Node<T>* node) {
+	if (node == NULL)
+		return;
+	Print_in_order(node->childLeft);
+	cout << node->data << " ";
+	Print_in_order(node->childRight);
+}
+template<class T>
+void BinaryTree<T>::Print_post_order(Node<T>* node) {
+	if (node == NULL)
+		return;
+	Print_post_order(node->childLeft);
+	Print_post_order(node->childRight);
+	cout << node->data << " ";
 }
 
 // Insertion Functions
@@ -117,6 +144,8 @@ bool BinaryTree<T>::Has_right(Node<T>* node) const { return node->childRight != 
 
 template<class T>
 void BinaryTree<T>::Delete_node(Node<T>* delNode) {
+	if (delNode == NULL)
+		throw runtime_error("Trying to delete empty node");
 	// Bad deletion
 	if (delNode->childLeft != NULL && delNode->childRight != NULL) {
 			throw runtime_error("Ambiguous deletion: Node has 2 children");
@@ -132,12 +161,16 @@ void BinaryTree<T>::Delete_node(Node<T>* delNode) {
 	} else {
 		// childRight is promoted
 		if (delNode->childLeft == NULL) {
+			Node<T>* delParent = delNode->parent;
 			Node<T>* delChild = delNode->childRight;
-			delChild->parent = delNode->parent;
+			delParent->childRight = delChild;
+			delChild->parent = delParent;
 		// childLeft is promoted
 		} else if (delNode->childRight == NULL) {
+			Node<T>* delParent = delNode->parent;
 			Node<T>* delChild = delNode->childLeft;
-			delChild->parent = delNode->parent;
+			delParent->childLeft = delChild;
+			delChild->parent = delParent;
 		}
 	}
 	height = Find_height(root);
