@@ -1,57 +1,63 @@
 // Binary tree
 
 #include <iostream>
+#include <string>
+#include "..\..\Linked List\LinkedList.cpp"
 
 using namespace std;
 
 template <typename T>
-struct Node {
-	// Data payload of the node
+struct TreeNode {
+	// Data payload of the TreeNode
 	T data;
-	//Parent Node
-	Node<T>* parent;
-	// left child node
-	Node<T>* childLeft;
-	// right child node
-	Node<T>* childRight;
+	//Parent TreeNode
+	TreeNode<T>* parent;
+	// left child TreeNode
+	TreeNode<T>* childLeft;
+	// right child TreeNode
+	TreeNode<T>* childRight;
 	
-	Node(T data, Node<T>* childLeft, Node<T>* childRight, Node<T>* parent);
-	Node(T data);
-	Node();
+	bool Has_left(TreeNode<T>* TreeNode) const;
+	bool Has_right(TreeNode<T>* TreeNode) const;
+	
+	TreeNode(T data, TreeNode<T>* childLeft, TreeNode<T>* childRight, TreeNode<T>* parent);
+	TreeNode(T data);
+	TreeNode();
 };
+
+enum TraverseType { PreOrder, InOrder, PostOrder };
 
 template<class T>
 class BinaryTree {
 private:
-	int Find_height(Node<T>* node);
-	void Delete_traverse(Node<T>* node);
+	int Find_height(TreeNode<T>* TreeNode);
+	void Delete_traverse(TreeNode<T>* TreeNode);
+	void Search_tree(TreeNode<T>* node, TraverseType type, LinkedList<TreeNode<T>>* list);
 	int height;
 	int Max(int a, int b);
 	BinaryTree();
 public:
-	Node<T>* root;
+	TreeNode<T>* root;
 	int Get_height() const;
-	BinaryTree(Node<T>* root);
+	BinaryTree(TreeNode<T>* root);
 	~BinaryTree();
-	void Insert_between(Node<T>* nodeAbove, Node<T>* nodeBelow, T data);
-	void Insert_left(Node<T>* leafNode, T data);
-	void Insert_right(Node<T>* leafNode, T data);
-	bool Has_left(Node<T>* node) const;
-	bool Has_right(Node<T>* node) const;
+	void Insert_between(TreeNode<T>* TreeNodeAbove, TreeNode<T>* TreeNodeBelow, T data);
+	TreeNode<T>* Insert_left(TreeNode<T>* leafTreeNode, T data);
+	TreeNode<T>* Insert_right(TreeNode<T>* leafTreeNode, T data);
 	// need to make sure not ambiguous
-	void Delete_node(Node<T>* delNode);
-	void Print_pre_order(Node<T>* node);
-	void Print_in_order(Node<T>* node);
-	void Print_post_order(Node<T>* node);
+	void Delete_TreeNode(TreeNode<T>* delTreeNode);
+	LinkedList<TreeNode<T>>* Get_pre_order();
+	LinkedList<TreeNode<T>>* Get_in_order();
+	LinkedList<TreeNode<T>>* Get_post_order();
 };
 
-// Node Constructors
+// TreeNode Constructors
 template<typename T>
-Node<T>::Node() : data(NULL), childLeft(NULL), childRight(NULL), parent(NULL) {}
+TreeNode<T>::TreeNode() : data(NULL), childLeft(NULL), childRight(NULL), parent(NULL) {}
 template<typename T>
-Node<T>::Node(T data) : data(data), childLeft(NULL), childRight(NULL), parent(NULL) {}
+TreeNode<T>::TreeNode(T data) : data(data), childLeft(NULL), childRight(NULL), parent(NULL) {}
 template<typename T>
-Node<T>::Node(T data, Node<T>* childLeft, Node<T>* childRight, Node<T>* parent) {
+TreeNode<T>::TreeNode(T data, TreeNode<T>* childLeft, TreeNode<T>* childRight, TreeNode<T>* parent) {
 	this->data = data;
 	this->childLeft = childLeft;
 	this->childRight = childRight;
@@ -60,7 +66,7 @@ Node<T>::Node(T data, Node<T>* childLeft, Node<T>* childRight, Node<T>* parent) 
 
 // Binary Tree Constructors
 template<class T>
-BinaryTree<T>::BinaryTree(Node<T>* root) : root(root), height(0) {}
+BinaryTree<T>::BinaryTree(TreeNode<T>* root) : root(root), height(0) {}
 template<class T>
 BinaryTree<T>::BinaryTree(){}
 
@@ -68,121 +74,126 @@ BinaryTree<T>::BinaryTree(){}
 template<class T>
 BinaryTree<T>::~BinaryTree() { Delete_traverse(root); }
 template<class T>
-void BinaryTree<T>::Delete_traverse(Node<T>* node) {
-	if (node == NULL)
+void BinaryTree<T>::Delete_traverse(TreeNode<T>* TreeNode) {
+	if (TreeNode == NULL)
 		return;
-	Delete_traverse(node->childLeft);
-	Delete_traverse(node->childRight);
-	delete node;
+	Delete_traverse(TreeNode->childLeft);
+	Delete_traverse(TreeNode->childRight);
+	delete TreeNode;
 }
 
-// Print loops
+// Traversals
 template<class T>
-void BinaryTree<T>::Print_pre_order(Node<T>* node) {
-	if (node == NULL)
-		return;
-	cout << node->data << " ";
-	Print_pre_order(node->childLeft);
-	Print_pre_order(node->childRight);
+LinkedList<TreeNode<T>>* BinaryTree<T>::Get_pre_order() {
+	LinkedList<TreeNode<T>>* list = new LinkedList<TreeNode<T>>();
+	Search_tree(root, TraverseType::PreOrder, list);
+	return list;
 }
 template<class T>
-void BinaryTree<T>::Print_in_order(Node<T>* node) {
-	if (node == NULL)
-		return;
-	Print_in_order(node->childLeft);
-	cout << node->data << " ";
-	Print_in_order(node->childRight);
+LinkedList<TreeNode<T>>* BinaryTree<T>::Get_in_order() {
+LinkedList<TreeNode<T>>* list = new LinkedList<TreeNode<T>>();
+	Search_tree(root, TraverseType::InOrder, list);
+	return list;
 }
 template<class T>
-void BinaryTree<T>::Print_post_order(Node<T>* node) {
+LinkedList<TreeNode<T>>* BinaryTree<T>::Get_post_order() {
+	LinkedList<TreeNode<T>>* list = new LinkedList<TreeNode<T>>();
+	Search_tree(root, TraverseType::PostOrder, list);
+	return list;
+}
+template<class T>
+void BinaryTree<T>::Search_tree(TreeNode<T>* node, TraverseType type, LinkedList<TreeNode<T>>* list) {
 	if (node == NULL)
 		return;
-	Print_post_order(node->childLeft);
-	Print_post_order(node->childRight);
-	cout << node->data << " ";
+	if (type == TraverseType::PreOrder)
+		list->Push_back(*node);
+	Search_tree(node->childLeft, type, list);
+	if (type == TraverseType::InOrder)
+		list->Push_back(*node);
+	Search_tree(node->childRight, type, list);
+	if (type == TraverseType::PostOrder)
+		list->Push_back(*node);
 }
 
 // Insertion Functions
 template<class T>
-void BinaryTree<T>::Insert_between(Node<T>* nodeAbove, Node<T>* nodeBelow, T data) {
-	Node<T>* newNode = new Node<T>(data, NULL, NULL, nodeAbove);
-	if (nodeAbove->childLeft == nodeBelow) {
-		nodeAbove->childLeft = newNode;
-		newNode->childLeft = nodeBelow;
-	} else if (nodeAbove->childRight == nodeBelow) {
-		nodeAbove->childRight = newNode;
-		newNode->childLeft = nodeBelow;
+void BinaryTree<T>::Insert_between(TreeNode<T>* TreeNodeAbove, TreeNode<T>* TreeNodeBelow, T data) {
+	TreeNode<T>* newTreeNode = new TreeNode<T>(data, NULL, NULL, TreeNodeAbove);
+	if (TreeNodeAbove->childLeft == TreeNodeBelow) {
+		TreeNodeAbove->childLeft = newTreeNode;
+		newTreeNode->childLeft = TreeNodeBelow;
+	} else if (TreeNodeAbove->childRight == TreeNodeBelow) {
+		TreeNodeAbove->childRight = newTreeNode;
+		newTreeNode->childLeft = TreeNodeBelow;
 	}
 	height = Get_height(root);
 }
 template<class T>
-void BinaryTree<T>::Insert_left(Node<T>* leafNode, T data) {
-	if (leafNode->childLeft == NULL) {
-		Node<T>* newNode = new Node<T>(data, NULL, NULL, leafNode);
-		leafNode->childLeft = newNode;
-		height = Find_height(root);
-	} else {
+TreeNode<T>* BinaryTree<T>::Insert_left(TreeNode<T>* leafTreeNode, T data) {
+	if (leafTreeNode->childLeft != NULL) 
 		throw runtime_error("left child already defined.");
-	}
+	TreeNode<T>* newTreeNode = new TreeNode<T>(data, NULL, NULL, leafTreeNode);
+	leafTreeNode->childLeft = newTreeNode;
+	height = Find_height(root);
+	return newTreeNode;
 }
 template<class T>
-void BinaryTree<T>::Insert_right(Node<T>* leafNode, T data) {
-	if (leafNode->childRight == NULL) {
-		Node<T>* newNode = new Node<T>(data, NULL, NULL, leafNode);
-		leafNode->childRight = newNode;
-		height = Find_height(root);
-	} else {
+TreeNode<T>* BinaryTree<T>::Insert_right(TreeNode<T>* leafTreeNode, T data) {
+	if (leafTreeNode->childRight != NULL) 
 		throw runtime_error("right child already defined.");
-	}
+	TreeNode<T>* newTreeNode = new TreeNode<T>(data, NULL, NULL, leafTreeNode);
+	leafTreeNode->childRight = newTreeNode;
+	height = Find_height(root);
+	return newTreeNode;
 }
 
-// ChildNode getters
+// ChildTreeNode getters
 template<class T>
-bool BinaryTree<T>::Has_left(Node<T>* node) const { return node->childLeft != NULL }
+bool TreeNode<T>::Has_left(TreeNode<T>* TreeNode) const { return TreeNode->childLeft != NULL }
 template<class T>
-bool BinaryTree<T>::Has_right(Node<T>* node) const { return node->childRight != NULL }
+bool TreeNode<T>::Has_right(TreeNode<T>* TreeNode) const { return TreeNode->childRight != NULL }
 
 template<class T>
-void BinaryTree<T>::Delete_node(Node<T>* delNode) {
-	if (delNode == NULL)
-		throw runtime_error("Trying to delete empty node");
+void BinaryTree<T>::Delete_TreeNode(TreeNode<T>* delTreeNode) {
+	if (delTreeNode == NULL)
+		throw runtime_error("Trying to delete empty TreeNode");
 	// Bad deletion
-	if (delNode->childLeft != NULL && delNode->childRight != NULL) {
-			throw runtime_error("Ambiguous deletion: Node has 2 children");
-	// Deleting a leaf node
-	} else if (delNode->childLeft == NULL && delNode->childRight == NULL) {
-		Node<T>* delParent = delNode->parent;
-		if (delParent->childLeft == delNode)
+	if (delTreeNode->childLeft != NULL && delTreeNode->childRight != NULL) {
+			throw runtime_error("Ambiguous deletion: TreeNode has 2 children");
+	// Deleting a leaf TreeNode
+	} else if (delTreeNode->childLeft == NULL && delTreeNode->childRight == NULL) {
+		TreeNode<T>* delParent = delTreeNode->parent;
+		if (delParent->childLeft == delTreeNode)
 			delParent->childLeft = NULL;
-		else if (delParent->childRight == delNode) {
+		else if (delParent->childRight == delTreeNode) {
 			delParent->childRight = NULL;
 		}
 	// Non-ambiguous deletion
 	} else {
 		// childRight is promoted
-		if (delNode->childLeft == NULL) {
-			Node<T>* delParent = delNode->parent;
-			Node<T>* delChild = delNode->childRight;
+		if (delTreeNode->childLeft == NULL) {
+			TreeNode<T>* delParent = delTreeNode->parent;
+			TreeNode<T>* delChild = delTreeNode->childRight;
 			delParent->childRight = delChild;
 			delChild->parent = delParent;
 		// childLeft is promoted
-		} else if (delNode->childRight == NULL) {
-			Node<T>* delParent = delNode->parent;
-			Node<T>* delChild = delNode->childLeft;
+		} else if (delTreeNode->childRight == NULL) {
+			TreeNode<T>* delParent = delTreeNode->parent;
+			TreeNode<T>* delChild = delTreeNode->childLeft;
 			delParent->childLeft = delChild;
 			delChild->parent = delParent;
 		}
 	}
 	height = Find_height(root);
-	delete delNode;
+	delete delTreeNode;
 }
 
 // Height Functions
 template<class T>
-int BinaryTree<T>::Find_height(Node<T>* node) {
-	if (node == NULL)
+int BinaryTree<T>::Find_height(TreeNode<T>* TreeNode) {
+	if (TreeNode == NULL)
 		return 0;
-	return Max(Find_height(node->childLeft), Find_height(node->childRight)) + 1;
+	return Max(Find_height(TreeNode->childLeft), Find_height(TreeNode->childRight)) + 1;
 }
 template<class T>
 int BinaryTree<T>::Get_height() const { return height; }

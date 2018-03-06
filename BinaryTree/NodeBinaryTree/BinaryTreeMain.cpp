@@ -6,7 +6,7 @@
 using namespace std;
 
 int main() {
-	Node<int>* root = new Node<int>(0);
+	TreeNode<int>* root = new TreeNode<int>(0);
 	BinaryTree<int> myTree(root);
 	myTree.Insert_left(root, 1);
 	myTree.Insert_right(root, 2);
@@ -15,25 +15,61 @@ int main() {
 	myTree.Insert_right(root->childRight, 5);
 	myTree.Insert_left(root->childRight, 99);
 	
-	cout << "Pre-order: \t{ ";myTree.Print_pre_order(root); cout << "}\n";
-	cout << "In-order: \t{ ";myTree.Print_in_order(root); cout << "}\n";
-	cout << "Post-order: \t{ ";myTree.Print_post_order(root); cout << "}\n";
+	LinkedList<TreeNode<int>>* preList = myTree.Get_pre_order();
+	LinkedList<TreeNode<int>>* inList = myTree.Get_in_order();
+	LinkedList<TreeNode<int>>* postList = myTree.Get_post_order();
+	cout << "PreOrder: { ";
+	for (int i = 0; i < preList->Get_size(); i++)
+		cout << preList->Element_at(i).data << " ";
+	cout << "}\n";
+	cout << "inOrder: { ";
+	for (int i = 0; i < inList->Get_size(); i++)
+		cout << inList->Element_at(i).data << " ";
+	cout << "}\n";
+	cout << "PostOrder: { ";
+	for (int i = 0; i < postList->Get_size(); i++)
+		cout << postList->Element_at(i).data << " ";
+	cout << "}\n";
 	
-	myTree.Delete_node(root->childRight->childLeft);
+	myTree.Delete_TreeNode(root->childRight->childLeft);
 	
-	cout << "\nPre-order: \t{ ";myTree.Print_pre_order(root); cout << "}\n";
-	cout << "In-order: \t{ ";myTree.Print_in_order(root); cout << "}\n";
-	cout << "Post-order: \t{ ";myTree.Print_post_order(root); cout << "}\n";
+	preList = myTree.Get_pre_order();
+	inList = myTree.Get_in_order();
+	postList = myTree.Get_post_order();
+	cout << "\nPreOrder: { ";
+	for (int i = 0; i < preList->Get_size(); i++)
+		cout << preList->Element_at(i).data << " ";
+	cout << "}\n";
+	cout << "inOrder: { ";
+	for (int i = 0; i < inList->Get_size(); i++)
+		cout << inList->Element_at(i).data << " ";
+	cout << "}\n";
+	cout << "PostOrder: { ";
+	for (int i = 0; i < postList->Get_size(); i++)
+		cout << postList->Element_at(i).data << " ";
+	cout << "}\n";
 	
 	myTree.Insert_left(root->childRight, 99);
 	myTree.Insert_left(root->childRight->childLeft, 66);
-	myTree.Delete_node(root->childRight->childLeft);
+	myTree.Delete_TreeNode(root->childRight->childLeft);
 	
-	cout << "\nPre-order: \t{ ";myTree.Print_pre_order(root); cout << "}\n";
-	cout << "In-order: \t{ ";myTree.Print_in_order(root); cout << "}\n";
-	cout << "Post-order: \t{ ";myTree.Print_post_order(root); cout << "}\n\nString Test:\n\n";
+	preList = myTree.Get_pre_order();
+	inList = myTree.Get_in_order();
+	postList = myTree.Get_post_order();
+	cout << "\nPreOrder: { ";
+	for (int i = 0; i < preList->Get_size(); i++)
+		cout << preList->Element_at(i).data << " ";
+	cout << "}\n";
+	cout << "inOrder: { ";
+	for (int i = 0; i < inList->Get_size(); i++)
+		cout << inList->Element_at(i).data << " ";
+	cout << "}\n";
+	cout << "PostOrder: { ";
+	for (int i = 0; i < postList->Get_size(); i++)
+		cout << postList->Element_at(i).data << " ";
+	cout << "}\n";
 	
-	Node<string>* root2 = new Node<string>("FPS");
+	TreeNode<string>* root2 = new TreeNode<string>("FPS");
 	BinaryTree<string> myTree2(root2);
 	myTree2.Insert_left(root2, "ARMA");
 	myTree2.Insert_right(root2, "HALF LIFE");
@@ -42,23 +78,14 @@ int main() {
 	myTree2.Insert_right(root2->childRight, "PREY");
 	myTree2.Insert_left(root2->childRight, "DEUS EX");
 	
-	cout << "Pre-order: \t{ ";myTree2.Print_pre_order(root2); cout << "}\n";
-	cout << "In-order: \t{ ";myTree2.Print_in_order(root2); cout << "}\n";
-	cout << "Post-order: \t{ ";myTree2.Print_post_order(root2); cout << "}\n";
 	
-	myTree2.Delete_node(root2->childRight->childLeft);
-	
-	cout << "\nPre-order: \t{ ";myTree2.Print_pre_order(root2); cout << "}\n";
-	cout << "In-order: \t{ ";myTree2.Print_in_order(root2); cout << "}\n";
-	cout << "Post-order: \t{ ";myTree2.Print_post_order(root2); cout << "}\n";
+	myTree2.Delete_TreeNode(root2->childRight->childLeft);
+
 	
 	myTree2.Insert_left(root2->childRight, "DEUS EX");
 	myTree2.Insert_left(root2->childRight->childLeft, "DISHONORED");
-	myTree2.Delete_node(root2->childRight->childLeft);
-	
-	cout << "\nPre-order: \t{ ";myTree2.Print_pre_order(root2); cout << "}\n";
-	cout << "In-order: \t{ ";myTree2.Print_in_order(root2); cout << "}\n";
-	cout << "Post-order: \t{ ";myTree2.Print_post_order(root2); cout << "}\n";
+	myTree2.Delete_TreeNode(root2->childRight->childLeft);
+
 	
 	return 0;
 }
