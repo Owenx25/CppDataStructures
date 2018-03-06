@@ -95,7 +95,6 @@ T LinkedList<T>::Element_at(int index) const {
 		}
 		return tempNode->data;
 	}
-	return NULL;
 }
 
 template<class T>

@@ -12,7 +12,8 @@ private:
 	BinaryTree<pair<int, T>> tree;
 	BST();
 public:
-	TreeNode<pair<int, T>>* Search(T key);
+	void List_in_order();
+	TreeNode<pair<int, T>>* Search(int key);
 	TreeNode<pair<int, T>>* Insert(int key, T value);
 	void Delete(int key, TreeNode<pair<int, T>> searchNode);
 	TreeNode<pair<int, T>>* Find_max(TreeNode<pair<int, T>>* subTreeRoot);
@@ -35,25 +36,33 @@ template<class T>
 BST<T>::~BST() {}
 
 template<class T>
-TreeNode<pair<int, T>>* BST<T>::Search(T key) {
-	TreeNode<pair<int, T>> searchTreeNode = tree.root;
+void BST<T>::List_in_order() {
+	auto* list = tree.Get_in_order();
+	cout << "Inorder: { ";
+	for (int i = 0; i < list->Get_size(); i++)
+		cout << list->Element_at(i).second << " ";
+	cout << "}\n";
+}
+
+template<class T>
+TreeNode<pair<int, T>>* BST<T>::Search(int key) {
+	TreeNode<pair<int, T>>* searchTreeNode = tree.root;
 	while (searchTreeNode != NULL) {
-		if (key == searchTreeNode->data.first)
+		if (key == (searchTreeNode->data).first)
 			return searchTreeNode;
 		if (key < searchTreeNode->data.first)
 			searchTreeNode = searchTreeNode->childLeft;
 		else
 			searchTreeNode = searchTreeNode->childRight;
 	}
-	return searchTreeNode;
+	throw runtime_error("Key not found");
 }
 
 template<class T>
 TreeNode<pair<int, T>>* BST<T>::Insert(int key, T value) {
 	pair<int, T> newPair(key, value);
-	TreeNode<pair<int, T>> searchTreeNode = tree.root;
+	TreeNode<pair<int, T>>* searchTreeNode = tree.root;
 	TreeNode<pair<int, T>>* TreeNodeBefore;
-	int key = newPair.first;
 	while (searchTreeNode != NULL) {
 		TreeNodeBefore = searchTreeNode;
 		if (key == searchTreeNode->data.first)
@@ -64,9 +73,9 @@ TreeNode<pair<int, T>>* BST<T>::Insert(int key, T value) {
 			searchTreeNode = searchTreeNode->childRight;
 	}
 	if (TreeNodeBefore->data.first > key)
-		return Insert_left(TreeNodeBefore, newPair);
+		return tree.Insert_left(TreeNodeBefore, newPair);
 	else
-		return Insert_right(TreeNodeBefore, newPair);
+		return tree.Insert_right(TreeNodeBefore, newPair);
 	return NULL;
 }
 

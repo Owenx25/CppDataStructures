@@ -32,7 +32,7 @@ class BinaryTree {
 private:
 	int Find_height(TreeNode<T>* TreeNode);
 	void Delete_traverse(TreeNode<T>* TreeNode);
-	void Search_tree(TreeNode<T>* node, TraverseType type, LinkedList<TreeNode<T>>* list);
+	void Search_tree(TreeNode<T>* node, TraverseType type, LinkedList<T>* list);
 	int height;
 	int Max(int a, int b);
 	BinaryTree();
@@ -46,9 +46,9 @@ public:
 	TreeNode<T>* Insert_right(TreeNode<T>* leafTreeNode, T data);
 	// need to make sure not ambiguous
 	void Delete_TreeNode(TreeNode<T>* delTreeNode);
-	LinkedList<TreeNode<T>>* Get_pre_order();
-	LinkedList<TreeNode<T>>* Get_in_order();
-	LinkedList<TreeNode<T>>* Get_post_order();
+	LinkedList<T>* Get_pre_order();
+	LinkedList<T>* Get_in_order();
+	LinkedList<T>* Get_post_order();
 };
 
 // TreeNode Constructors
@@ -84,35 +84,35 @@ void BinaryTree<T>::Delete_traverse(TreeNode<T>* TreeNode) {
 
 // Traversals
 template<class T>
-LinkedList<TreeNode<T>>* BinaryTree<T>::Get_pre_order() {
-	LinkedList<TreeNode<T>>* list = new LinkedList<TreeNode<T>>();
+LinkedList<T>* BinaryTree<T>::Get_pre_order() {
+	LinkedList<T>* list = new LinkedList<T>();
 	Search_tree(root, TraverseType::PreOrder, list);
 	return list;
 }
 template<class T>
-LinkedList<TreeNode<T>>* BinaryTree<T>::Get_in_order() {
-LinkedList<TreeNode<T>>* list = new LinkedList<TreeNode<T>>();
+LinkedList<T>* BinaryTree<T>::Get_in_order() {
+	LinkedList<T>* list = new LinkedList<T>();
 	Search_tree(root, TraverseType::InOrder, list);
 	return list;
 }
 template<class T>
-LinkedList<TreeNode<T>>* BinaryTree<T>::Get_post_order() {
-	LinkedList<TreeNode<T>>* list = new LinkedList<TreeNode<T>>();
+LinkedList<T>* BinaryTree<T>::Get_post_order() {
+	LinkedList<T>* list = new LinkedList<T>();
 	Search_tree(root, TraverseType::PostOrder, list);
 	return list;
 }
 template<class T>
-void BinaryTree<T>::Search_tree(TreeNode<T>* node, TraverseType type, LinkedList<TreeNode<T>>* list) {
+void BinaryTree<T>::Search_tree(TreeNode<T>* node, TraverseType type, LinkedList<T>* list) {
 	if (node == NULL)
 		return;
 	if (type == TraverseType::PreOrder)
-		list->Push_back(*node);
+		list->Push_back(node->data);
 	Search_tree(node->childLeft, type, list);
 	if (type == TraverseType::InOrder)
-		list->Push_back(*node);
+		list->Push_back(node->data);
 	Search_tree(node->childRight, type, list);
 	if (type == TraverseType::PostOrder)
-		list->Push_back(*node);
+		list->Push_back(node->data);
 }
 
 // Insertion Functions
