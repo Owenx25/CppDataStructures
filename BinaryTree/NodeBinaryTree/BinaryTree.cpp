@@ -17,8 +17,8 @@ struct TreeNode {
 	// right child TreeNode
 	TreeNode<T>* childRight;
 	
-	bool Has_left(TreeNode<T>* TreeNode) const;
-	bool Has_right(TreeNode<T>* TreeNode) const;
+	bool Has_left() const;
+	bool Has_right() const;
 	
 	TreeNode(T data, TreeNode<T>* childLeft, TreeNode<T>* childRight, TreeNode<T>* parent);
 	TreeNode(T data);
@@ -149,9 +149,9 @@ TreeNode<T>* BinaryTree<T>::Insert_right(TreeNode<T>* leafTreeNode, T data) {
 
 // ChildTreeNode getters
 template<class T>
-bool TreeNode<T>::Has_left(TreeNode<T>* TreeNode) const { return TreeNode->childLeft != NULL }
+bool TreeNode<T>::Has_left() const { return childLeft != NULL; }
 template<class T>
-bool TreeNode<T>::Has_right(TreeNode<T>* TreeNode) const { return TreeNode->childRight != NULL }
+bool TreeNode<T>::Has_right() const { return childRight != NULL; }
 
 template<class T>
 void BinaryTree<T>::Delete_TreeNode(TreeNode<T>* delTreeNode) {
@@ -159,7 +159,7 @@ void BinaryTree<T>::Delete_TreeNode(TreeNode<T>* delTreeNode) {
 		throw runtime_error("Trying to delete empty TreeNode");
 	// Bad deletion
 	if (delTreeNode->childLeft != NULL && delTreeNode->childRight != NULL) {
-			throw runtime_error("Ambiguous deletion: TreeNode has 2 children");
+		throw runtime_error("Ambiguous deletion: TreeNode has 2 children");
 	// Deleting a leaf TreeNode
 	} else if (delTreeNode->childLeft == NULL && delTreeNode->childRight == NULL) {
 		TreeNode<T>* delParent = delTreeNode->parent;
@@ -180,7 +180,10 @@ void BinaryTree<T>::Delete_TreeNode(TreeNode<T>* delTreeNode) {
 		} else if (delTreeNode->childRight == NULL) {
 			TreeNode<T>* delParent = delTreeNode->parent;
 			TreeNode<T>* delChild = delTreeNode->childLeft;
-			delParent->childLeft = delChild;
+			if (delParent->childLeft == delTreeNode)
+				delParent->childLeft = delChild;
+			else
+				delParent->childRight = delChild;
 			delChild->parent = delParent;
 		}
 	}

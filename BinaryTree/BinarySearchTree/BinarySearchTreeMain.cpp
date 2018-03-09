@@ -10,6 +10,7 @@ int main() {
 	// BSTs use an int key and T value Pair
 	// In this case T = string
 	BST<string> BST(10, "Faith");
+	auto root = BST.Search(10);
 	BST.Insert(7, "Ezio");
 	BST.Insert(3, "Aloy");
 	BST.Insert(8, "Moira");
@@ -28,6 +29,19 @@ int main() {
 	}
 	BST.List_in_order();
 	
+	// Leaf deletion
+	BST.Delete(13, root);
+	BST.List_in_order();
+	BST.Insert(13, "David");
+	
+	// Single-child Deletion
+	BST.Delete(15, root);
+	BST.List_in_order();
+	BST.Insert(15, "Bayek");
+	
+	// Full Deletion
+	BST.Delete(12, root);
+	BST.List_in_order();
 	
 	return 0;
 }

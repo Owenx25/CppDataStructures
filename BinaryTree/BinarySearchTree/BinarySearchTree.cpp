@@ -15,7 +15,7 @@ public:
 	void List_in_order();
 	TreeNode<pair<int, T>>* Search(int key);
 	TreeNode<pair<int, T>>* Insert(int key, T value);
-	void Delete(int key, TreeNode<pair<int, T>> searchNode);
+	void Delete(int key, TreeNode<pair<int, T>>* searchNode);
 	TreeNode<pair<int, T>>* Find_max(TreeNode<pair<int, T>>* subTreeRoot);
 	TreeNode<pair<int, T>>* Find_min(TreeNode<pair<int, T>>* subTreeRoot);
 	BST(TreeNode<pair<int, T>>* root);
@@ -80,39 +80,42 @@ TreeNode<pair<int, T>>* BST<T>::Insert(int key, T value) {
 }
 
 template<class T>
-void BST<T>::Delete(int key, TreeNode<pair<int, T>> searchNode) {
+void BST<T>::Delete(int key, TreeNode<pair<int, T>>* searchNode) {
 	while (searchNode != NULL) {
 		// Found our TreeNode to delete
 		if (key == searchNode->data.first) {
 			// Cases with a leaf or One child are easily dealt with
-			try { Delete_TreeNode(searchNode); }
+			try { 
+				tree.Delete_TreeNode(searchNode);
+				return;
+			}
 			catch (exception& e) {
 				// Get either inOrder Predecessor or Successor
-				TreeNode<pair<int, T>>* successor = searchNode->childRight->Find_min();
+				TreeNode<pair<int, T>>* successor = Find_min(searchNode->childRight);
 				// overwrite key and data of delete node
 				searchNode->data = successor->data;
 				// delete predecessor or successor(call function again)
-				Delete(successor.first, searchNode);
+				Delete(successor->data.first, successor);
+				return;
 			}	
-		}
-		if (key < searchNode->data.first)
+		} else if (key < searchNode->data.first)
 			searchNode = searchNode->childLeft;
-		else
+		else if (key > searchNode->data.first)
 			searchNode = searchNode->childRight;
 	}
-	throw runtime_error("Cannot delete key missing from tree");
+	throw runtime_error("Cannot delete, key missing from tree");
 }
 
 template<class T>
 TreeNode<pair<int, T>>* BST<T>::Find_min(TreeNode<pair<int, T>>* subTreeRoot) {
 	while (subTreeRoot->Has_left())
-		subTreeRoot = subTreeRoot->childLeft
+		subTreeRoot = subTreeRoot->childLeft;
 	return subTreeRoot;
 }
 template<class T>
 TreeNode<pair<int, T>>* BST<T>::Find_max(TreeNode<pair<int, T>>* subTreeRoot) {
 	while (subTreeRoot->Has_right())
-		subTreeRoot = subTreeRoot->childRight
+		subTreeRoot = subTreeRoot->childRight;
 	return subTreeRoot;
 }
 
