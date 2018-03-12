@@ -13,3 +13,12 @@ Binary Tree
 Properties:
 - Nodes in a full BT is at least {2 * Height + 1} and at most {2^(Height + 1) - 1}
 - # of leaf nodes in a perfect BT is (nodes + 1) / 2 
+
+Variants:
+- Binary Search Tree
+	- Left child is always less than current node, right child always greater
+	Efficiency:
+		- Space: O(n)
+		- Search: O(log(n)) to O(n)
+		- Insert: O(log(n)) to O(n)
+		- Delete: O(log(n)) to O(n)

@@ -3,63 +3,54 @@
 
 using namespace std;
 
-template <class ArrayType>
+template <class T>
 class Array{
 	private:
-		int size;
-		ArrayType* startptr;
+		int capacity;
+		T* startptr;
 		Array();
 	public:
 		~Array();
-		ArrayType& operator[](int index);
-		void operator=(const ArrayType& other);
-		Array(int size);
-		int Get_size();
+		Array(int capacity);
+		T& operator[](const int index) const;
+		int Get_capacity() const;
 };
 
-//Implementation Portion
-template<class ArrayType>
-int Array<ArrayType>::Get_size() {
-	return size;
+template<class T>
+Array<T>::Array(int capacity)
+{
+	if (capacity <= 0)
+		throw runtime_error("invalid init size");
+	this->capacity = capacity;
+	startptr = new T[capacity];
+	while (--capacity)
+		startptr[capacity] = T();
+	if (startptr == NULL)
+		throw runtime_error("Could not allocate memory");
 }
 
-template<class ArrayType>
-Array<ArrayType>::Array()
+template<class T>
+int Array<T>::Get_capacity() const{ return capacity; }
+
+template<class T>
+Array<T>::Array()
 {
 	throw runtime_error("Trying to init empty array");
 	exit(1);
 }
 
-template<class ArrayType>
-Array<ArrayType>::Array(int size)
+template<class T>
+T& Array<T>::operator[](const int index) const
 {
-	if (size <= 0)
-		throw runtime_error("invalid init size");
-	this->size = size;
-	startptr = new ArrayType[size];
-	if (startptr == NULL)
-		throw runtime_error("Could not allocate memory");
-}
-
-template<class ArrayType>
-ArrayType& Array<ArrayType>::operator[](int index)
-{
-	if (index >= size || index < 0)
+	if (index >= capacity || index < 0)
 		throw runtime_error("Index out of range");
 
 	return startptr[index];
 }
 
-template<class ArrayType>
-void Array<ArrayType>::operator=(const ArrayType& other)
-{
-	if (other == null)
-		throw runtime_error("Assigning to null value");
-	startptr + sizeof(ArrayType) = other;
-}
-
-template<class ArrayType>
-Array<ArrayType>::~Array()
+template<class T>
+Array<T>::~Array()
 {
 	delete[] startptr;
+	startptr = 0;
 }

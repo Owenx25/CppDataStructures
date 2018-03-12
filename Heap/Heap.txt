@@ -1,0 +1,16 @@
+Heap
+======
+- tree-based data structure that follows the heap property
+	- The key stored in each node is >=(Max heap) or <=(min heap) to its children
+- Can be implemented with pointers but Array is mush more efficient/common
+- With array:
+	- Nodes are located at 2n where n = node index
+	- Left child located at 2n + 1
+	- Right child located at 2n + 2
+	- elements out of order are simply swapped up into order
+
+
+Variants:
+- Binary Heap
+	- All levels of tree except bottom are completely filled
+	- The key stored in each node is >=(Max heap) or <=(min heap) to its children
