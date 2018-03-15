@@ -17,14 +17,16 @@ int main() {
 		tree.insert_child(LEFT, 6, 2);
 		tree.insert_child(RIGHT, 7, 2);
 		tree.insert_child(LEFT, 8, 3);
-		
+		cout << "Height: " << tree.height(0) << endl;
 		tree.printBFS();
 		
 		// Deleting
 		tree.delete_node(7);
+		cout << "Height: " << tree.height(0) << endl;
 		tree.printBFS();
 		tree.insert_child(LEFT, 8, 3);
 		tree.delete_node(3);
+		cout << "Height: " << tree.height(0) << endl;
 		tree.printBFS();
 	} 
 	catch(exception& e) {

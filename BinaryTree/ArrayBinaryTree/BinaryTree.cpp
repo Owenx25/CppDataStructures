@@ -14,14 +14,17 @@ private:
 	vector<pair<bool,T>> tree;
 	BinaryTree();
 	void check_OOB(const int index) const;
+	int Max(int a, int b);
 public:
 	BinaryTree(const T Data);
 	void insert_child(const ChildType child, const T data, const int parentIndex);
+	int insert_in_order(const T data);
 	void delete_node(int delIndex);
 	bool has_child(ChildType child, int index) const;
-	int height() const;
+	int height(int root);
 	int num_nodes() const;
-	T get_data(int const index) const;
+	T get_data(const int index) const;
+	void set_data(const int index, const T data);
 	int get_child(int const index, const ChildType child) const;
 	void printBFS();
 };
@@ -48,6 +51,11 @@ void BinaryTree<T>::insert_child(const ChildType child, const T data, const int 
 		tree.push_back(pair<bool, T>(false, T()));
 	}
 	tree[childIndex] = pair<bool, T>(true, data);
+}
+template<class T>
+int BinaryTree<T>::insert_in_order(const T data) {
+	tree.push_back(make_pair(true, data));
+	return tree.size() - 1;
 }
 
 // Delete Functions
@@ -91,7 +99,13 @@ T BinaryTree<T>::get_data(int const index) const{
 	return tree[index].second;
 }
 template<class T>
-bool BinaryTree<T>::has_child (ChildType child, int index) const {
+void BinaryTree<T>::set_data(const int index, const T data) {
+	check_OOB(index);
+	tree[index] = make_pair(true, data);
+}
+
+template<class T>
+bool BinaryTree<T>::has_child(ChildType child, int index) const {
 	check_OOB(index);
 	int childIndex = 2 * index + child;
 	if (childIndex > tree.size() - 1)
@@ -103,7 +117,24 @@ bool BinaryTree<T>::has_child (ChildType child, int index) const {
 	return false;
 }
 template<class T>
-int BinaryTree<T>::num_nodes() const { return tree.size(); };
+int BinaryTree<T>::num_nodes() const {
+	int sum = 0;
+	for (int i = 0; i <= tree.size() - 1; ++i) {
+			if (tree[i].first)
+				sum++;
+	}
+	return sum;
+}
+template<class T>
+int BinaryTree<T>::height(int root) {
+	int L = 0;
+	int R = 0;
+	if (has_child(LEFT, root))
+		L = height(get_child(root, LEFT));
+	if (has_child(RIGHT, root))
+		R = height(get_child(root, RIGHT));
+	return Max(L, R) + 1;
+}
 
 // Helpers
 template<class T>
@@ -123,4 +154,11 @@ void BinaryTree<T>::printBFS() {
 			cout << itr->second << " ";
 	}
 	cout << "}\n";
+}
+template<class T>
+int BinaryTree<T>::Max(int a, int b) {
+	if (a > b)
+		return a;
+	else
+		return b;
 }

@@ -16,17 +16,18 @@ Abstract Data Types:
 Bonus Variants:
 - Circular Array
 - Deque
-- Array Implemented Binary Tree
 
 Rules: 
 - Once a week read up on a DS and implement it in C++
 - After the core DS have been implemented I can do a few variants
 =============================================================================
-Week 1: 2/20/18
+Completed Structures:
 - Array
-Week 2: 2/26/18
 - Linked List
-Week 3: 3/5/18
-- Stack
+- Doubly Linked List
+- Stack (Array, LL)
+- Queue
+- Binary Tree (Node, Array)
+- BST
 
 
