@@ -20,15 +20,15 @@ int main() {
 		
 		tree.printBFS();
 		
-		// Inserting between two nodes
-		tree.insert_between(0, LEFT, 0);
+		// Deleting
+		tree.delete_node(7);
+		tree.printBFS();
+		tree.insert_child(LEFT, 8, 3);
+		tree.delete_node(3);
 		tree.printBFS();
 	} 
 	catch(exception& e) {
 		cout << "Caught exception: " << e.what() << endl;
 	}
-	
-	
-	
 	return 0;
 }
