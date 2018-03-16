@@ -1,0 +1,33 @@
+Graph
+======
+- Set of Vertices connect by edges
+ex.
+          __
+		 |  \
+         |  (C)
+		 |  / \
+		 | /   \
+		 |/     \
+		(A)-----(B)
+		 |\     /
+		 | \   /
+		 |  \ /
+         |  (D)
+		 |__/
+		 
+		 
+- In a Weighted Graph each edge has a numeric value associated with it
+- In a Directed graph every edge had a direction associated with it
+
+Implementation:
+- Graphs are common implemented in two ways:
+	- Note: Pros and cons are essentially the same as Array vs LL
+	1) Adjacency Matrix - A VxV 2D matrix defines the vertex relationships of the entire graph
+		- Good space locality but there could be many cells of wasted space in a graph with fewer edges
+		- Adding, Removing, and Accessing an edge is an O(1) operation
+		- Adding a vertex takes O(V^2) time
+		- Wastes A LOT of space when used for an undirected graph
+	2) Adjacency List - An Array of lists defines the graph with each cell representing a vertex
+		- Memory is more spread out but less overall space is used since we only define edges 
+		- If the list has a tail, Adding is O(1), if list is doubly linked, Deleting is O(1) (At the cost of more memory overhead)
+		- It's probably best to put the lists in a hash map

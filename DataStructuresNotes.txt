@@ -15,7 +15,6 @@ Abstract Data Types:
 
 Bonus Variants:
 - Circular Array
-- Deque
 
 Rules: 
 - Once a week read up on a DS and implement it in C++
@@ -23,11 +22,12 @@ Rules:
 =============================================================================
 Completed Structures:
 - Array
-- Linked List
+- Linked List (has same operations as deque)
 - Doubly Linked List
 - Stack (Array, LL)
 - Queue
 - Binary Tree (Node, Array)
 - BST
+- Binary Heap/Priority Queue
 
 
