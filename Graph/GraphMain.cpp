@@ -3,7 +3,7 @@
 #include <string>
 #include <vector>
 #include <assert.h>
-#include "AdjacencyMatrix.cpp"
+#include "Adjacency Matrix\AdjacencyMatrix.cpp"
 
 using namespace std;
 

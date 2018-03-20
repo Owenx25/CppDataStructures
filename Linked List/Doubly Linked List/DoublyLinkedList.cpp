@@ -107,7 +107,6 @@ T DoublyLinkedList<T>::Element_at(int index) const {
 		return Back();
 	else
 		return Get_node_at(index)->data;
-	return NULL;
 }
 
 template<class T>
