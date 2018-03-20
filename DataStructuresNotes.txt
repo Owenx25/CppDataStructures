@@ -20,7 +20,7 @@ Rules:
 - Once a week read up on a DS and implement it in C++
 - After the core DS have been implemented I can do a few variants
 =============================================================================
-Completed Structures:
+Implemented Structures:
 - Array
 - Linked List (has same operations as deque)
 - Doubly Linked List
@@ -29,5 +29,12 @@ Completed Structures:
 - Binary Tree (Node, Array)
 - BST
 - Binary Heap/Priority Queue
+- Graph (Adjacency Matrix, Adjacency List)
+
+Other TODO:
+- Add a copy constructor for every DS
+- Overload Assignment for every DS
+- Give each DS an iterator
+- Standardized testing for each DS
 
 

@@ -21,6 +21,8 @@ public:
 	// Weight has to be >0
 	void add_edge(const T fromVertex, const T toVertex, const int weight);
 	void remove_edge(const T fromVertex, const T toVertex);
+	void add_vertex(const T newVertex);
+	void remove_vertex(const T vertex);
 	int get_weight(const T fromVertex, const T toVertex);
 	int get_degree(const T vertex);
 	int num_vertices() const;
@@ -102,6 +104,33 @@ void Graph<T>::remove_edge(const T fromVertex, const T toVertex) {
 	AdjacencyList[fromVertex].Delete_at(toIndex);
 	if (!isDirected)
 		AdjacencyList[toVertex].Delete_at(fromIndex);
+}
+
+template<class T>
+void Graph<T>::add_vertex(const T newVertex) {
+	AdjacencyList[newVertex] = DoublyLinkedList<pair<int, T>>();
+}
+
+template<class T>
+void Graph<T>::remove_vertex(const T newVertex) {
+	if (AdjacencyList.find(newVertex) == AdjacencyList.end())
+		throw runtime_error("Cannot remove vertex that does not exist");
+	/* Gonna need to:
+		- Drop map entry
+		- remove any references leftover in the other vertices */
+	
+	AdjacencyList.erase(newVertex);
+	for(map<T, DoublyLinkedList<pair<int, T>>>::iterator iter = AdjacencyList.begin(); iter != AdjacencyList.end(); ++iter) {
+		vector<int> deleteIndexes;
+		for(int i = 0; i < iter->second.Get_size(); i++) {
+			if (iter->second.Element_at(i).second == newVertex) {
+				deleteIndexes.push_back(i);
+			}
+		}
+		for(vector<int>::const_iterator index_itr = deleteIndexes.begin(); index_itr != deleteIndexes.end(); ++index_itr) {
+			iter->second.Delete_at(*index_itr);
+		}
+	}
 }
 
 template<class T>

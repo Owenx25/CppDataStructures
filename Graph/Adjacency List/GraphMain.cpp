@@ -56,6 +56,14 @@ int main() {
 		assert(test.get_degree("Edward") == 2);
 		assert(test.get_weight("Edward", "Carl") == 4);
 		write_neighbors("Edward", "Neighbors", test.get_neighbors("Edward"));
+		
+		// Adding/Removing Vertices
+		test.add_vertex("Zarya");
+		test.add_edge("Abby", "Zarya", 20);
+		write_neighbors("Zarya", "Neighbors", test.get_neighbors("Zarya"));
+		write_neighbors("Abby", "Neighbors", test.get_neighbors("Abby"));
+		test.remove_vertex("Zarya");
+		write_neighbors("Abby", "Neighbors", test.get_neighbors("Abby"));
 	} catch (exception& e) {
 		cout << "Caught exception: " << e.what() << endl;
 	}
