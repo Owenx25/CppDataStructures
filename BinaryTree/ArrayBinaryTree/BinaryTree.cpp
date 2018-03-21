@@ -12,15 +12,17 @@ template<class T>
 class BinaryTree {
 private:
 	vector<pair<bool,T>> tree;
-	BinaryTree();
 	void check_OOB(const int index) const;
 	int Max(int a, int b);
 public:
+	BinaryTree();
 	BinaryTree(const T Data);
+	void insert_head(const T Data);
 	void insert_child(const ChildType child, const T data, const int parentIndex);
 	int insert_in_order(const T data);
 	void delete_node(int delIndex);
 	bool has_child(ChildType child, int index) const;
+	bool is_empty() const;
 	int height(int root);
 	int num_nodes() const;
 	T get_data(const int index) const;
@@ -31,11 +33,19 @@ public:
 
 // Constructors
 template<class T>
-BinaryTree<T>::BinaryTree(const T data) { tree.push_back(pair<bool, T>(true, data)); }
+BinaryTree<T>::BinaryTree(const T data) { insert_head(data); }
+
+template<class T>
+BinaryTree<T>::BinaryTree(){}
 
 // Insert Functions
 template<class T>
+void BinaryTree<T>::insert_head(const T data) { tree.push_back(pair<bool, T>(true, data)); }
+
+template<class T>
 void BinaryTree<T>::insert_child(const ChildType child, const T data, const int parentIndex) {
+	if (tree.size() == 0)
+		throw runtime_error("tree needs a head");
 	check_OOB(parentIndex);
 	int childIndex = 2 * parentIndex + child;
 	// if we already have space for a child
@@ -54,6 +64,8 @@ void BinaryTree<T>::insert_child(const ChildType child, const T data, const int 
 }
 template<class T>
 int BinaryTree<T>::insert_in_order(const T data) {
+	if (tree.size() == 0)
+		throw runtime_error("tree needs a head");
 	tree.push_back(make_pair(true, data));
 	return tree.size() - 1;
 }
@@ -116,10 +128,14 @@ bool BinaryTree<T>::has_child(ChildType child, int index) const {
 	}
 	return false;
 }
+
+template<class T>
+bool BinaryTree<T>::is_empty() const { return num_nodes() == 0; }
+
 template<class T>
 int BinaryTree<T>::num_nodes() const {
 	int sum = 0;
-	for (int i = 0; i <= tree.size() - 1; ++i) {
+	for (int i = 0; i < tree.size(); ++i) {
 			if (tree[i].first)
 				sum++;
 	}

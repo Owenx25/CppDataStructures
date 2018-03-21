@@ -2,6 +2,7 @@
 #include <iostream>
 #include <string>
 #include "BinaryHeap.cpp"
+#include <assert.h>
 
 using namespace std;
 
@@ -34,17 +35,27 @@ int main() {
 	heap.insert(26, "z");
 	heap.print();
 	
-	heap.extract();
+	assert(heap.extract() == "z");
 	heap.print();
 	
 	BinaryHeap<int> brokeHeap(MAX, 1, 0);
 	brokeHeap.print();
-	brokeHeap.extract();
+	assert(brokeHeap.extract() == 0);
 	try {
 		brokeHeap.extract();
 	}
 	catch(exception& e) { cout << "Caught exception: " << e.what() << endl; }
-	brokeHeap.print();
+	brokeHeap.print();	
+	try {
+		cout << "\nAdding to Empty Heap:\n";
+		BinaryHeap<int> brokeHeap(MIN);
+		brokeHeap.print();
+		assert(brokeHeap.is_empty());
+		brokeHeap.insert(1, 25);
+		assert(!brokeHeap.is_empty());
+		brokeHeap.print();
+	}
+	catch(exception& e) { cout << "Caught exception: " << e.what() << endl; }
 	
 	return 0;
 }

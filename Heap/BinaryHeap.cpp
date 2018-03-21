@@ -12,53 +12,64 @@ class BinaryHeap {
 private:
 	BinaryTree<pair<int, T>> tree;
 	BinaryHeap();
-	int insertIndex;
 	void swap(int parentIndex, int childIndex);
 	HeapType heapType;
-	void max_heapify(int index);
-	void min_heapify(int index);
+	void max_heapify(int index = 0);
+	void min_heapify(int index = 0);
 public:
 	void insert(int key, T data);
-	void extract();
+	T extract();
 	int height();
 	void print();
+	bool is_empty() const;
+	BinaryHeap(const HeapType heapType);
 	BinaryHeap(const HeapType heapType, const int key,const T data);
 };
 
 // Constructors
 template<class T>
 BinaryHeap<T>::BinaryHeap(const HeapType heapType, const int key, const T data) : 
-	heapType(heapType), tree(make_pair(key,data)), insertIndex(1) {}
+	heapType(heapType), tree(make_pair(key,data)) {}
+	
+template<class T>
+BinaryHeap<T>::BinaryHeap(const HeapType heapType) : heapType(heapType) {}
 
 // Insert
 template<class T>
 void BinaryHeap<T>::insert(int key, T data) {
-	int newIndex = tree.insert_in_order(make_pair(key, data));
-	int parent = floor((newIndex - 1) / 2);
-	while ((tree.get_data(parent).first < tree.get_data(newIndex).first && heapType == MAX) ||
-	       (tree.get_data(parent).first > tree.get_data(newIndex).first && heapType == MIN)) {
-		if (newIndex == 0) // We've reached the head
-			break;
-		swap(parent, newIndex);
-		newIndex = parent;
-		parent = floor((newIndex - 1) / 2);
+	if (tree.is_empty()) {
+		tree.insert_head(make_pair(key, data));
+	}
+	else {
+		int newIndex = tree.insert_in_order(make_pair(key, data));
+		int parent = floor((newIndex - 1) / 2);
+		while ((tree.get_data(parent).first < tree.get_data(newIndex).first && heapType == MAX) ||
+			   (tree.get_data(parent).first > tree.get_data(newIndex).first && heapType == MIN)) {
+			if (newIndex == 0) // We've reached the head
+				break;
+			swap(parent, newIndex);
+			newIndex = parent;
+			parent = floor((newIndex - 1) / 2);
+		}
 	}
 }
 
 // Extract
 template<class T>
-void BinaryHeap<T>::extract() {
+T BinaryHeap<T>::extract() {
 	if (tree.num_nodes() == 0)
 		throw runtime_error("Trying to extract empty heap");
+	const T oldData = tree.get_data(0).second;
 	tree.set_data(0, tree.get_data(tree.num_nodes() - 1));
 	tree.delete_node(tree.num_nodes() - 1);
 	if (heapType == MAX)
-		max_heapify(0);
+		max_heapify();
 	else
-		min_heapify(0);
+		min_heapify();
+	return oldData;
 }
 template<class T>
-void BinaryHeap<T>::max_heapify(int index) {
+void BinaryHeap<T>::max_heapify(int index = 0) {
 	int left = 2 * index + 1;
 	int right = 2 * index + 2;
 	int largest = index;
@@ -74,7 +85,7 @@ void BinaryHeap<T>::max_heapify(int index) {
 	}
 }
 template<class T>
-void BinaryHeap<T>::min_heapify(int index) {
+void BinaryHeap<T>::min_heapify(int index = 0) {
 	int left = 2 * index + 1;
 	int right = 2 * index + 2;
 	int smallest = index;
@@ -100,6 +111,10 @@ void BinaryHeap<T>::print() {
 		cout << tree.get_data(i).first << ":" << tree.get_data(i).second << " ";
 	cout << "}\n";
 }
+
+template<class T>
+bool BinaryHeap<T>::is_empty() const { return tree.is_empty();}
+
 // Helper Functions
 template<class T>
 void BinaryHeap<T>::swap(int parentIndex, int childIndex) {

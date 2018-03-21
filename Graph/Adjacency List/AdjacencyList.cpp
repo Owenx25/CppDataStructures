@@ -25,7 +25,9 @@ public:
 	void remove_vertex(const T vertex);
 	int get_weight(const T fromVertex, const T toVertex);
 	int get_degree(const T vertex);
+	DoublyLinkedList<T> get_all_vertices() const;
 	int num_vertices() const;
+	DoublyLinkedList<T> get_dijkstras(const T start, const T goal);
 	DoublyLinkedList<T> get_neighbors(const T vertex);
 	DoublyLinkedList<pair<int, T>> get_incoming(const T vertex);
 	DoublyLinkedList<pair<int, T>> get_outgoing(const T vertex);
@@ -134,6 +136,14 @@ void Graph<T>::remove_vertex(const T newVertex) {
 }
 
 template<class T>
+DoublyLinkedList<T> Graph<T>::get_all_vertices() const {
+	DoublyLinkedList<T> vertexList;
+	for(map<T, DoublyLinkedList<pair<int, T>>>::iterator iter = AdjacencyList.begin(); iter != AdjacencyList.end(); ++iter) {
+		vertexList.Push_back(iter->first);
+	return vertexList;
+}
+
+template<class T>
 int Graph<T>::get_weight(const T fromVertex, const T toVertex) {
 	if (AdjacencyList.find(fromVertex) == AdjacencyList.end() ||
 	    AdjacencyList.find(toVertex) == AdjacencyList.end()) // Ex 1
@@ -148,6 +158,28 @@ int Graph<T>::get_weight(const T fromVertex, const T toVertex) {
 
 template<class T>
 int Graph<T>::num_vertices() const { return AdjacencyList.size(); }
+
+template<class T>
+DoublyLinkedList<T> Graph<T>::get_dijkstras(const T start, const T goal) {
+	// map<T, int> dist;
+	// map<T, T> prev;
+	// distance[start] = 0;
+	
+	// BinaryHeap<T> Q(MIN);
+	For each vertex in graph
+	
+	// for(map<T, DoublyLinkedList<pair<int, T>>>::iterator iter = AdjacencyList.begin(); iter != AdjacencyList.end(); ++iter) {
+		// if (iter->first != start) {
+			// dist[iter->first] = -1;
+			// prev[iter->first] = T();
+		// }
+		// Q.insert(dist[iter->first], iter->first);
+	// }
+	
+	// while (!is_empty()) {
+		
+	// }
+}
 
 // In Directed need to add Column and row elements
 template<class T>

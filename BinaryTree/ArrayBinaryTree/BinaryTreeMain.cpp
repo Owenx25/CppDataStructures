@@ -2,6 +2,7 @@
 #include <iostream>
 #include <string>
 #include "BinaryTree.cpp"
+#include <assert.h>
 
 using namespace std;
 
@@ -28,6 +29,12 @@ int main() {
 		tree.delete_node(3);
 		cout << "Height: " << tree.height(0) << endl;
 		tree.printBFS();
+		
+		BinaryTree<int> empty;
+		empty.printBFS();
+		assert(empty.is_empty());
+		assert(empty.num_nodes() == 0);
+		
 	} 
 	catch(exception& e) {
 		cout << "Caught exception: " << e.what() << endl;

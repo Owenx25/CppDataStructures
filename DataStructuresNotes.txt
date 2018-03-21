@@ -36,5 +36,6 @@ Other TODO:
 - Overload Assignment for every DS
 - Give each DS an iterator
 - Standardized testing for each DS
+- Seperate implementations and declarations into separate files
 
 
