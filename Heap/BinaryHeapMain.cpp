@@ -52,7 +52,13 @@ int main() {
 		brokeHeap.print();
 		assert(brokeHeap.is_empty());
 		brokeHeap.insert(1, 25);
+		brokeHeap.insert(6, 35);
+		brokeHeap.insert(2, 5);
+		brokeHeap.insert(10, 205);
+		brokeHeap.insert(23, 7);
 		assert(!brokeHeap.is_empty());
+		brokeHeap.print();
+		brokeHeap.modify_key(23, 5);
 		brokeHeap.print();
 	}
 	catch(exception& e) { cout << "Caught exception: " << e.what() << endl; }

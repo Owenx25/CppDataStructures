@@ -16,11 +16,14 @@ private:
 	HeapType heapType;
 	void max_heapify(int index = 0);
 	void min_heapify(int index = 0);
+	int get_index(int key);
+	int find_key(int key, int index = 0); 
 public:
 	void insert(int key, T data);
 	T extract();
 	int height();
 	void print();
+	void modify_key(int key, int newKey);
 	bool is_empty() const;
 	BinaryHeap(const HeapType heapType);
 	BinaryHeap(const HeapType heapType, const int key,const T data);
@@ -124,4 +127,81 @@ void BinaryHeap<T>::swap(int parentIndex, int childIndex) {
 		tree.set_data(childIndex, dataTemp);
 	} else
 		throw runtime_error("That's not my kid!");
+}
+
+template<class T>
+int BinaryHeap<T>::get_index(int key) {
+	int currentIndex = 0;
+	if (tree.get_data(currentIndex).first == key)
+			return currentIndex;
+	int result = find_key(key);
+	if (result == -1)
+		throw runtime_error("key not present in heap");
+	return result;
+}
+
+template<class T>
+int BinaryHeap<T>::find_key(int key, int index = 0) {
+	if (tree.has_child(LEFT, index)) {
+		//cout << "checked left\n";
+		int left = tree.get_child(index, LEFT);
+		if (tree.get_data(left).first == key)
+			return left;
+		else if ((tree.get_data(left).first > key && heapType == MAX) ||
+				(tree.get_data(left).first < key && heapType == MIN)) {
+			int result = find_key(key, left);
+			if (result != -1) { return result; }
+		}
+	}
+	if (tree.has_child(RIGHT, index)) {
+		//cout << "checked right\n";
+		int right = tree.get_child(index, RIGHT);
+		if (tree.get_data(right).first == key)
+			return right;
+		else if ((tree.get_data(right).first > key && heapType == MAX) ||
+				(tree.get_data(right).first < key && heapType == MIN)) {
+			int result = find_key(key, right);
+			if (result != -1) { return result; }
+		}
+	}
+	return -1;
+}
+
+// Misc functions
+template<class T>
+void BinaryHeap<T>::modify_key(int key, int newKey) {
+	int keyIndex = get_index(key);
+	cout << "key index is " << keyIndex << endl;
+	tree.set_data(keyIndex, make_pair(newKey, tree.get_data(keyIndex).second));
+	while (true) {
+		if (tree.has_child(LEFT, keyIndex)) {
+			int left = tree.get_child(keyIndex, LEFT);
+			if ((tree.get_data(left).first > newKey && heapType == MAX) ||
+			   (tree.get_data(left).first < newKey && heapType == MIN)) {
+				swap(keyIndex, left);
+				keyIndex = left;
+				continue;
+		   }
+		}
+		if (tree.has_child(RIGHT, keyIndex)) {
+			int right = tree.get_child(keyIndex, RIGHT);
+			if ((tree.get_data(right).first > newKey && heapType == MAX) ||
+			   (tree.get_data(right).first < newKey && heapType == MIN)) {
+				swap(keyIndex, right);
+				keyIndex = right;
+				continue;
+			}
+		}
+		if (keyIndex != 0) {
+			//every node has parent except for root
+			int parent = floor((keyIndex - 1) / 2);
+			if ((tree.get_data(parent).first < newKey && heapType == MAX) ||
+			   (tree.get_data(parent).first > newKey && heapType == MIN)) {
+				swap(parent, keyIndex);
+				keyIndex = parent;
+				continue;
+			}
+		}
+		return;
+	}
 }

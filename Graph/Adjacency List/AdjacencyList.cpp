@@ -161,24 +161,33 @@ int Graph<T>::num_vertices() const { return AdjacencyList.size(); }
 
 template<class T>
 DoublyLinkedList<T> Graph<T>::get_dijkstras(const T start, const T goal) {
-	// map<T, int> dist;
-	// map<T, T> prev;
-	// distance[start] = 0;
+	map<T, int> dist;
+	map<T, T> prev;
+	distance[start] = 0;	
+	BinaryHeap<T> Q(MIN);
 	
-	// BinaryHeap<T> Q(MIN);
-	For each vertex in graph
+	for(map<T, DoublyLinkedList<pair<int, T>>>::iterator iter = AdjacencyList.begin(); iter != AdjacencyList.end(); ++iter) {
+		if (iter->first != start) {
+			dist[iter->first] = 99999;
+			prev[iter->first] = T();
+		}
+		Q.insert(dist[iter->first], iter->first);
+	}
 	
-	// for(map<T, DoublyLinkedList<pair<int, T>>>::iterator iter = AdjacencyList.begin(); iter != AdjacencyList.end(); ++iter) {
-		// if (iter->first != start) {
-			// dist[iter->first] = -1;
-			// prev[iter->first] = T();
-		// }
-		// Q.insert(dist[iter->first], iter->first);
-	// }
+	while (!is_empty()) {
+		T currentVertex = Q.extract();
+		DoublyLinkedList<T> neighbors = get_neighbors(currentVertex);
+		for (int i = 0; int i < neighbors.Get_size(); i++) {
+			T vertex = neighbors.Element_at(i);
+			int alt = dist[currentVertex] + get_weight(vertex, currentVertex);
+			if alt < (dist[currentVertex]) {
+				dist[currentVertex] = alt;
+				prev[currentVertex] = vertex;
+				
+			}
+		}
+	}
 	
-	// while (!is_empty()) {
-		
-	// }
 }
 
 // In Directed need to add Column and row elements
