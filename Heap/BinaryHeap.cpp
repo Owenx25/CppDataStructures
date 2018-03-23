@@ -15,10 +15,12 @@ private:
 public:
 	int Key() const { return _key; }
 	void Key(const int key) { _key = key; }
-	T2 Data() const { return _name; }
+	T2 Data() const { return _data; }
 	void Data(const T2 data) { _data = data; }
-	
-	HeapNode(T2 data, int key) : _data(data), _key(key) {} 
+	bool operator==(HeapNode& node) const { return (_data == node.Data()) && (_key == node.Key()); }
+	HeapNode(const HeapNode& node) { _data = node.Data(); _key = node.Key(); }
+	HeapNode(int key, T2 data) : _data(data), _key(key) {}
+	HeapNode() : _data(T2()), _key(NULL) {}
 };
 
 template<class T>
@@ -30,30 +32,37 @@ private:
 	HeapType heapType;
 	void max_heapify(int index = 0);
 	void min_heapify(int index = 0);
-	int get_index(int key);
-	int find_key(int key, int index = 0); 
+	int find_node_index(HeapNode<T> node);
+	int search_tree(HeapNode<T> searchNode, int index = 0); 
 public:
-	void insert(HeapNode<T> newNode);
+	void insert(const int key, const T data);
 	HeapNode<T> extract();
 	int height();
 	void print();
-	void modify_key(int key, int newKey);
+	void modify_key(const HeapNode<T> node, int newKey);
+	void modify_key(const int key, const T data, int newKey);
+	bool node_exists(const HeapNode<T> node) const;
 	bool is_empty() const;
 	BinaryHeap(const HeapType heapType);
-	BinaryHeap(const HeapType heapType, const HeapNode<T> heapNode);
+	BinaryHeap(const HeapType heapType, const int key, const T data);
+	BinaryHeap(const HeapType heapType, const HeapNode<T> node);
 };
 
 // Constructors
 template<class T>
-BinaryHeap<T>::BinaryHeap(const HeapType heapType, const HeapNode<T> node) : 
-	heapType(heapType), tree(node) {}
+BinaryHeap<T>::BinaryHeap(const HeapType heapType, const int key, const T data) : 
+	heapType(heapType), tree(HeapNode<T>(key, data)) {}
 	
 template<class T>
 BinaryHeap<T>::BinaryHeap(const HeapType heapType) : heapType(heapType) {}
 
+template<class T>
+BinaryHeap<T>::BinaryHeap(const HeapType heapType, const HeapNode<T> node) : heapType(heapType), tree(node) {}
+
 // Insert
 template<class T>
-void BinaryHeap<T>::insert(const HeapNode<T> node) {
+void BinaryHeap<T>::insert(const int key, const T data) {
+	HeapNode<T> node = HeapNode<T>(key, data);
 	// Can't insert pair that already exists in table
 	if (tree.is_empty()) {
 		tree.insert_head(node);
@@ -77,7 +86,7 @@ template<class T>
 HeapNode<T> BinaryHeap<T>::extract() {
 	if (tree.num_nodes() == 0)
 		throw runtime_error("Trying to extract empty heap");
-	const HeapNode<T> oldData = tree.get_data(0);
+	HeapNode<T> oldData = tree.get_data(0);
 	tree.set_data(0, tree.get_data(tree.num_nodes() - 1));
 	tree.delete_node(tree.num_nodes() - 1);
 	if (heapType == MAX)
@@ -92,9 +101,9 @@ void BinaryHeap<T>::max_heapify(int index = 0) {
 	int right = 2 * index + 2;
 	int largest = index;
 	
-	if (left <= tree.num_nodes() && tree.get_data(left).first > tree.get_data(largest).first)
+	if (left <= tree.num_nodes() && tree.get_data(left).Key() > tree.get_data(largest).Key())
 		largest = left;
-	if (right <= tree.num_nodes() && tree.get_data(right).first > tree.get_data(largest).first)
+	if (right <= tree.num_nodes() && tree.get_data(right).Key() > tree.get_data(largest).Key())
 		largest = right;
 	
 	if (largest != index) {
@@ -108,9 +117,9 @@ void BinaryHeap<T>::min_heapify(int index = 0) {
 	int right = 2 * index + 2;
 	int smallest = index;
 	
-	if (left <= tree.num_nodes() && tree.get_data(left).first < tree.get_data(smallest).first)
+	if (left <= tree.num_nodes() && tree.get_data(left).Key() < tree.get_data(smallest).Key())
 		smallest = left;
-	if (right <= tree.num_nodes() && tree.get_data(right).first < tree.get_data(smallest).first)
+	if (right <= tree.num_nodes() && tree.get_data(right).Key() < tree.get_data(smallest).Key())
 		smallest = right;
 	
 	if (smallest != index) {
@@ -133,13 +142,18 @@ void BinaryHeap<T>::print() {
 }
 
 template<class T>
+bool BinaryHeap<T>::node_exists(const HeapNode<T> node) const {
+	return find_node_index(node) != -1;
+}
+
+template<class T>
 bool BinaryHeap<T>::is_empty() const { return tree.is_empty();}
 
 // Helper Functions
 template<class T>
 void BinaryHeap<T>::swap(int parentIndex, int childIndex) {
 	if (childIndex == (2 * parentIndex + 1) || childIndex == (2 * parentIndex + 2)) {
-		const HeapNode<T> tempNode = tree.get_data(parentIndex);
+		HeapNode<T> tempNode = tree.get_data(parentIndex);
 		tree.set_data(parentIndex, tree.get_data(childIndex));
 		tree.set_data(childIndex, tempNode);
 	} else
@@ -147,37 +161,37 @@ void BinaryHeap<T>::swap(int parentIndex, int childIndex) {
 }
 
 template<class T>
-int BinaryHeap<T>::get_index(int key) {
+int BinaryHeap<T>::find_node_index(HeapNode<T> node) {
 	int currentIndex = 0;
-	if (tree.get_data(currentIndex).Key() == key)
+	if (tree.get_data(currentIndex) == node)
 			return currentIndex;
-	int result = find_key(key);
+	int result = search_tree(node);
 	if (result == -1)
 		throw runtime_error("key not present in heap");
 	return result;
 }
 
 template<class T>
-int BinaryHeap<T>::find_key(int key, int index = 0) {
+int BinaryHeap<T>::search_tree(HeapNode<T> searchNode, int index = 0) {
 	if (tree.has_child(LEFT, index)) {
 		int left = tree.get_child(index, LEFT);
-		HeapNode<T> node = tree.get_data(left);
-		if (node.Key() == key)
+		HeapNode<T> leftNode = tree.get_data(left);
+		if (leftNode == searchNode)
 			return left;
-		else if ((node.Key() > key && heapType == MAX) ||
-				 (node.Key() < key && heapType == MIN)) {
-			int result = find_key(key, left);
+		else if ((leftNode.Key() >= searchNode.Key() && heapType == MAX) ||
+				 (leftNode.Key() <= searchNode.Key() && heapType == MIN)) {
+			int result = search_tree(searchNode, left);
 			if (result != -1) { return result; }
 		}
 	}
 	if (tree.has_child(RIGHT, index)) {
 		int right = tree.get_child(index, RIGHT);
-		HeapNode<T> node = tree.get_data(right);
-		if (node.Key() == key)
+		HeapNode<T> rightNode = tree.get_data(right);
+		if (rightNode == searchNode)
 			return right;
-		else if ((node.Key() > key && heapType == MAX) ||
-				(node.Key() < key && heapType == MIN)) {
-			int result = find_key(key, right);
+		else if ((rightNode.Key() >= searchNode.Key() && heapType == MAX) ||
+				 (rightNode.Key() <= searchNode.Key() && heapType == MIN)) {
+			int result = search_tree(searchNode, right);
 			if (result != -1) { return result; }
 		}
 	}
@@ -186,8 +200,8 @@ int BinaryHeap<T>::find_key(int key, int index = 0) {
 
 // Misc functions
 template<class T>
-void BinaryHeap<T>::modify_key(int key, int newKey) {
-	int keyIndex = get_index(key);
+void BinaryHeap<T>::modify_key(const HeapNode<T> node, int newKey) {
+	int keyIndex = find_node_index(node);
 	cout << "key index is " << keyIndex << endl;
 	tree.set_data(keyIndex, HeapNode<T>(newKey, tree.get_data(keyIndex).Data()));
 	while (true) {
@@ -224,4 +238,9 @@ void BinaryHeap<T>::modify_key(int key, int newKey) {
 		}
 		return;
 	}
+}
+
+template<class T>
+void BinaryHeap<T>::modify_key(const int key, const T data, int newKey) {
+	modify_key(HeapNode<T>(key, data), newKey);
 }

@@ -35,12 +35,12 @@ int main() {
 	heap.insert(26, "z");
 	heap.print();
 	
-	assert(heap.extract().second == "z");
+	assert(heap.extract().Data() == "z");
 	heap.print();
 	
 	BinaryHeap<int> brokeHeap(MAX, 1, 0);
 	brokeHeap.print();
-	assert(brokeHeap.extract().second == 0);
+	assert(brokeHeap.extract().Data() == 0);
 	try {
 		brokeHeap.extract();
 	}
@@ -58,7 +58,7 @@ int main() {
 		brokeHeap.insert(23, 7);
 		assert(!brokeHeap.is_empty());
 		brokeHeap.print();
-		brokeHeap.modify_key(23, 5);
+		brokeHeap.modify_key(23, 7, 5);
 		brokeHeap.print();
 	}
 	catch(exception& e) { cout << "Caught exception: " << e.what() << endl; }
