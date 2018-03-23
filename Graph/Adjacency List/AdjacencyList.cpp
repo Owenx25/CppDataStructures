@@ -23,7 +23,7 @@ public:
 	void add_edge(const T fromVertex, const T toVertex, const int weight);
 	void remove_edge(const T fromVertex, const T toVertex);
 	void add_vertex(const T newVertex);
-	void remove_vertex(const T vertex);
+	void remove_vertex(T delVertex);
 	int get_weight(const T fromVertex, const T toVertex);
 	int get_degree(const T vertex);
 	DoublyLinkedList<T> get_all_vertices() const;
@@ -115,22 +115,23 @@ void Graph<T>::add_vertex(const T newVertex) {
 }
 
 template<class T>
-void Graph<T>::remove_vertex(const T newVertex) {
-	if (AdjacencyList.find(newVertex) == AdjacencyList.end())
+void Graph<T>::remove_vertex(T delVertex) {
+	if (AdjacencyList.find(delVertex) == AdjacencyList.end())
 		throw runtime_error("Cannot remove vertex that does not exist");
 	/* Gonna need to:
 		- Drop map entry
 		- remove any references leftover in the other vertices */
-	
-	AdjacencyList.erase(newVertex);
+	AdjacencyList.erase(delVertex);
 	for(map<T, DoublyLinkedList<pair<int, T>>>::iterator iter = AdjacencyList.begin(); iter != AdjacencyList.end(); ++iter) {
 		vector<int> deleteIndexes;
 		for(int i = 0; i < iter->second.Get_size(); i++) {
-			if (iter->second.Element_at(i).second == newVertex) {
+			if (iter->second.Element_at(i).second == delVertex) {
 				deleteIndexes.push_back(i);
 			}
 		}
 		for(vector<int>::const_iterator index_itr = deleteIndexes.begin(); index_itr != deleteIndexes.end(); ++index_itr) {
+			cout << "Deleting: " << *index_itr << "\nFrom List ";
+			cout << iter->first << "\nList Length: " << iter->second.Get_size()  << endl;
 			iter->second.Delete_at(*index_itr);
 		}
 	}
@@ -176,7 +177,7 @@ map<T, T> Graph<T>::get_dijkstras(const T start, const T goal) {
 	}
 	
 	while (!Q.is_empty()) {
-		const T currentVertex = Q.extract().second;
+		const T currentVertex = Q.extract().Data();
 		DoublyLinkedList<T> neighbors = get_neighbors(currentVertex);
 		for (int i = 0; i < neighbors.Get_size(); i++) {
 			T vertex = neighbors.Element_at(i);
@@ -185,11 +186,11 @@ map<T, T> Graph<T>::get_dijkstras(const T start, const T goal) {
 				dist[currentVertex] = alt;
 				prev[currentVertex] = vertex;
 				// All elements share this key so this wont work
-				Q.modify_key(999999, alt); 
+				Q.modify_key(dist[vertex], vertex, alt); 
 			}
 		}
 	}
-	return prev
+	return prev;
 }
 
 // In Directed need to add Column and row elements
@@ -217,7 +218,7 @@ int Graph<T>::get_degree(const T vertex) {
 template<class T>
 DoublyLinkedList<T> Graph<T>::get_neighbors(const T vertex) {
 	if (AdjacencyList.find(vertex) == AdjacencyList.end())
-		throw runtime_error("Cannot get degree, vertex does not exist");
+		throw runtime_error("Cannot get neighbor, vertex does not exist");
 	// map holds all unique neighbors
 	map<T,T> uniqueVertices;
 	// Copy vertex neighbor's data into the map

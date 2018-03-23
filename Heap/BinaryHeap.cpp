@@ -64,6 +64,8 @@ template<class T>
 void BinaryHeap<T>::insert(const int key, const T data) {
 	HeapNode<T> node = HeapNode<T>(key, data);
 	// Can't insert pair that already exists in table
+	// if (!node_exists(node))
+		// throw runtime_error("Node already in heap");
 	if (tree.is_empty()) {
 		tree.insert_head(node);
 	}

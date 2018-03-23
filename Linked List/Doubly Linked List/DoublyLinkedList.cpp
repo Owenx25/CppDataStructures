@@ -71,7 +71,7 @@ Node<T>::Node() {
 
 template<class T>
 DoublyLinkedList<T>::DoublyLinkedList(const DoublyLinkedList& copyList) {
-	size = 0;
+	this->size = 0;
 	for (int i = 0; i < copyList.Get_size(); i++)
 		this->Push_back(copyList.Element_at(i));
 }
@@ -139,7 +139,7 @@ Node<T>::Node(T data, Node<T>* next, Node<T>* prev) : data(data), next(next), pr
 
 template<class T>
 bool DoublyLinkedList<T>::Is_empty() const{
-	return !size;
+	return size == 0;
 }
 
 template<class T>
@@ -158,22 +158,25 @@ void DoublyLinkedList<T>::Pop_front() {
 
 template<class T>
 void DoublyLinkedList<T>::Pop_back() {
-	if (!Is_empty()) {
-		Node<T>* oldTail = tail;
-		tail = tail->prev;
-		if (size == 1)
-			head = NULL;
-		size--;
-		delete oldTail;
+	if (Is_empty())
+		throw runtime_error("Trying to pop_back empty list");
+	Node<T>* firstNode = head; 
+	if (firstNode->next == NULL) {
+		delete firstNode;
+		firstNode = NULL;
+		return;
 	}
-	else
-		throw runtime_error("Popping empty index");
+	while (firstNode->next && firstNode->next->next != NULL) {
+		firstNode = firstNode->next;
+	}
+	delete firstNode->next;
+	firstNode->next = NULL;
 }
 
 template<class T>
 void DoublyLinkedList<T>::Delete_at(int index) {
 	if (index < 0 || index >= size)
-		throw runtime_error("Bad Index in Insert_at()");
+		throw runtime_error("Bad Index in Delete_at()");
 	if (index == 0)
 		Pop_front();
 	else if (index == size - 1)

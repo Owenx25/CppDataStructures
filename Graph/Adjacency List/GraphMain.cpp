@@ -33,14 +33,14 @@ int main() {
 		names.Push_back("Carl");
 		names.Push_back("Daniel");
 		names.Push_back("Edward");
-		// Setup Graph
+		//Setup Graph
 		Graph<string> test(names, false);
 		test.add_edge("Abby", "Ben", 1);
 		test.add_edge("Ben", "Daniel", 2);
 		test.add_edge("Daniel", "Edward", 3);
 		test.add_edge("Edward", "Carl", 4);
 		test.add_edge("Carl", "Abby", 5);
-		// Check vertices		
+		//Check vertices		
 		assert(test.get_degree("Abby") == 2);
 		assert(test.get_weight("Abby", "Ben") == 1);
 		write_neighbors("Abby", "Neighbors", test.get_neighbors("Abby"));
@@ -57,7 +57,7 @@ int main() {
 		assert(test.get_weight("Edward", "Carl") == 4);
 		write_neighbors("Edward", "Neighbors", test.get_neighbors("Edward"));
 		
-		// Adding/Removing Vertices
+		//Adding/Removing Vertices
 		test.add_vertex("Zarya");
 		test.add_edge("Abby", "Zarya", 20);
 		write_neighbors("Zarya", "Neighbors", test.get_neighbors("Zarya"));
