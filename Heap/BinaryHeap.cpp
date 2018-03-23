@@ -7,10 +7,24 @@ using namespace std;
 
 enum HeapType { MAX, MIN };
 
+template<class T2>
+class HeapNode {
+private:
+	T2 _data;
+	int _key;
+public:
+	int Key() const { return _key; }
+	void Key(const int key) { _key = key; }
+	T2 Data() const { return _name; }
+	void Data(const T2 data) { _data = data; }
+	
+	HeapNode(T2 data, int key) : _data(data), _key(key) {} 
+};
+
 template<class T>
 class BinaryHeap {
 private:
-	BinaryTree<pair<int, T>> tree;
+	BinaryTree<HeapNode<T>> tree;
 	BinaryHeap();
 	void swap(int parentIndex, int childIndex);
 	HeapType heapType;
@@ -19,35 +33,36 @@ private:
 	int get_index(int key);
 	int find_key(int key, int index = 0); 
 public:
-	void insert(int key, T data);
-	T extract();
+	void insert(HeapNode<T> newNode);
+	HeapNode<T> extract();
 	int height();
 	void print();
 	void modify_key(int key, int newKey);
 	bool is_empty() const;
 	BinaryHeap(const HeapType heapType);
-	BinaryHeap(const HeapType heapType, const int key,const T data);
+	BinaryHeap(const HeapType heapType, const HeapNode<T> heapNode);
 };
 
 // Constructors
 template<class T>
-BinaryHeap<T>::BinaryHeap(const HeapType heapType, const int key, const T data) : 
-	heapType(heapType), tree(make_pair(key,data)) {}
+BinaryHeap<T>::BinaryHeap(const HeapType heapType, const HeapNode<T> node) : 
+	heapType(heapType), tree(node) {}
 	
 template<class T>
 BinaryHeap<T>::BinaryHeap(const HeapType heapType) : heapType(heapType) {}
 
 // Insert
 template<class T>
-void BinaryHeap<T>::insert(int key, T data) {
+void BinaryHeap<T>::insert(const HeapNode<T> node) {
+	// Can't insert pair that already exists in table
 	if (tree.is_empty()) {
-		tree.insert_head(make_pair(key, data));
+		tree.insert_head(node);
 	}
 	else {
-		int newIndex = tree.insert_in_order(make_pair(key, data));
+		int newIndex = tree.insert_in_order(node);
 		int parent = floor((newIndex - 1) / 2);
-		while ((tree.get_data(parent).first < tree.get_data(newIndex).first && heapType == MAX) ||
-			   (tree.get_data(parent).first > tree.get_data(newIndex).first && heapType == MIN)) {
+		while ((tree.get_data(parent).Key() < tree.get_data(newIndex).Key() && heapType == MAX) ||
+			   (tree.get_data(parent).Key() > tree.get_data(newIndex).Key() && heapType == MIN)) {
 			if (newIndex == 0) // We've reached the head
 				break;
 			swap(parent, newIndex);
@@ -59,10 +74,10 @@ void BinaryHeap<T>::insert(int key, T data) {
 
 // Extract
 template<class T>
-T BinaryHeap<T>::extract() {
+HeapNode<T> BinaryHeap<T>::extract() {
 	if (tree.num_nodes() == 0)
 		throw runtime_error("Trying to extract empty heap");
-	const T oldData = tree.get_data(0).second;
+	const HeapNode<T> oldData = tree.get_data(0);
 	tree.set_data(0, tree.get_data(tree.num_nodes() - 1));
 	tree.delete_node(tree.num_nodes() - 1);
 	if (heapType == MAX)
@@ -110,8 +125,10 @@ int BinaryHeap<T>::height() { return tree.height(0); }
 template<class T>
 void BinaryHeap<T>::print() {
 	cout << "{ ";
-	for (int i = 0; i <= tree.num_nodes() - 1; ++i)
-		cout << tree.get_data(i).first << ":" << tree.get_data(i).second << " ";
+	for (int i = 0; i <= tree.num_nodes() - 1; ++i) {
+		HeapNode<T> node = tree.get_data(i);
+		cout << node.Data() << ":" << node.Key() << " ";
+	}
 	cout << "}\n";
 }
 
@@ -122,9 +139,9 @@ bool BinaryHeap<T>::is_empty() const { return tree.is_empty();}
 template<class T>
 void BinaryHeap<T>::swap(int parentIndex, int childIndex) {
 	if (childIndex == (2 * parentIndex + 1) || childIndex == (2 * parentIndex + 2)) {
-		pair<int, T> dataTemp = tree.get_data(parentIndex);
+		const HeapNode<T> tempNode = tree.get_data(parentIndex);
 		tree.set_data(parentIndex, tree.get_data(childIndex));
-		tree.set_data(childIndex, dataTemp);
+		tree.set_data(childIndex, tempNode);
 	} else
 		throw runtime_error("That's not my kid!");
 }
@@ -132,7 +149,7 @@ void BinaryHeap<T>::swap(int parentIndex, int childIndex) {
 template<class T>
 int BinaryHeap<T>::get_index(int key) {
 	int currentIndex = 0;
-	if (tree.get_data(currentIndex).first == key)
+	if (tree.get_data(currentIndex).Key() == key)
 			return currentIndex;
 	int result = find_key(key);
 	if (result == -1)
@@ -143,23 +160,23 @@ int BinaryHeap<T>::get_index(int key) {
 template<class T>
 int BinaryHeap<T>::find_key(int key, int index = 0) {
 	if (tree.has_child(LEFT, index)) {
-		//cout << "checked left\n";
 		int left = tree.get_child(index, LEFT);
-		if (tree.get_data(left).first == key)
+		HeapNode<T> node = tree.get_data(left);
+		if (node.Key() == key)
 			return left;
-		else if ((tree.get_data(left).first > key && heapType == MAX) ||
-				(tree.get_data(left).first < key && heapType == MIN)) {
+		else if ((node.Key() > key && heapType == MAX) ||
+				 (node.Key() < key && heapType == MIN)) {
 			int result = find_key(key, left);
 			if (result != -1) { return result; }
 		}
 	}
 	if (tree.has_child(RIGHT, index)) {
-		//cout << "checked right\n";
 		int right = tree.get_child(index, RIGHT);
-		if (tree.get_data(right).first == key)
+		HeapNode<T> node = tree.get_data(right);
+		if (node.Key() == key)
 			return right;
-		else if ((tree.get_data(right).first > key && heapType == MAX) ||
-				(tree.get_data(right).first < key && heapType == MIN)) {
+		else if ((node.Key() > key && heapType == MAX) ||
+				(node.Key() < key && heapType == MIN)) {
 			int result = find_key(key, right);
 			if (result != -1) { return result; }
 		}
@@ -172,12 +189,13 @@ template<class T>
 void BinaryHeap<T>::modify_key(int key, int newKey) {
 	int keyIndex = get_index(key);
 	cout << "key index is " << keyIndex << endl;
-	tree.set_data(keyIndex, make_pair(newKey, tree.get_data(keyIndex).second));
+	tree.set_data(keyIndex, HeapNode<T>(newKey, tree.get_data(keyIndex).Data()));
 	while (true) {
 		if (tree.has_child(LEFT, keyIndex)) {
 			int left = tree.get_child(keyIndex, LEFT);
-			if ((tree.get_data(left).first > newKey && heapType == MAX) ||
-			   (tree.get_data(left).first < newKey && heapType == MIN)) {
+			HeapNode<T> leftNode = tree.get_data(left);
+			if ((leftNode.Key() > newKey && heapType == MAX) ||
+			    (leftNode.Key() < newKey && heapType == MIN)) {
 				swap(keyIndex, left);
 				keyIndex = left;
 				continue;
@@ -185,8 +203,9 @@ void BinaryHeap<T>::modify_key(int key, int newKey) {
 		}
 		if (tree.has_child(RIGHT, keyIndex)) {
 			int right = tree.get_child(keyIndex, RIGHT);
-			if ((tree.get_data(right).first > newKey && heapType == MAX) ||
-			   (tree.get_data(right).first < newKey && heapType == MIN)) {
+			HeapNode<T> rightNode = tree.get_data(right);
+			if ((rightNode.Key() > newKey && heapType == MAX) ||
+			    (rightNode.Key() < newKey && heapType == MIN)) {
 				swap(keyIndex, right);
 				keyIndex = right;
 				continue;
@@ -195,8 +214,9 @@ void BinaryHeap<T>::modify_key(int key, int newKey) {
 		if (keyIndex != 0) {
 			//every node has parent except for root
 			int parent = floor((keyIndex - 1) / 2);
-			if ((tree.get_data(parent).first < newKey && heapType == MAX) ||
-			   (tree.get_data(parent).first > newKey && heapType == MIN)) {
+			HeapNode<T> parentNode = tree.get_data(parent);
+			if ((parentNode.Key() < newKey && heapType == MAX) ||
+			    (parentNode.Key() > newKey && heapType == MIN)) {
 				swap(parent, keyIndex);
 				keyIndex = parent;
 				continue;

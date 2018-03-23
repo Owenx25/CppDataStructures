@@ -106,5 +106,36 @@ int main() {
 	} catch (exception& e) {
 		cout << "Caught exception: " << e.what() << endl;
 	}
+	
+	cout << "\nDijkstra's:\n";
+	// Test Dijkstras
+	try {
+		// Create Vertices
+		DoublyLinkedList<string> D_vertices;
+		D_vertices.Push_back("A");
+		D_vertices.Push_back("B");
+		D_vertices.Push_back("C");
+		D_vertices.Push_back("D");
+		D_vertices.Push_back("E");
+		D_vertices.Push_back("F");
+		D_vertices.Push_back("G");
+		D_vertices.Push_back("H");
+		// Setup graph
+		Graph<string> D_graph(D_vertices, false);
+		D_graph.add_edge("A", "G", 2);
+		D_graph.add_edge("A", "F", 2);
+		D_graph.add_edge("G", "B", 1);
+		D_graph.add_edge("F", "C", 3);
+		D_graph.add_edge("B", "C", 4);
+		D_graph.add_edge("B", "H", 2);
+		D_graph.add_edge("C", "D", 2);
+		D_graph.add_edge("C", "E", 1);
+		D_graph.add_edge("D", "E", 2);
+		D_graph.add_edge("D", "H", 1);
+		//Dijkstra's
+		D_graph.get_dijkstras("A", "D");
+	} catch (exception& e) {
+		cout << "Caught exception: " << e.what() << endl;
+	}
 	return 0;
 }

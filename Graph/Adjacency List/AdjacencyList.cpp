@@ -5,6 +5,7 @@
 #include <map>
 #include <utility>
 #include "..\..\Linked List\Doubly Linked List\DoublyLinkedList.cpp"
+#include "..\..\Heap\BinaryHeap.cpp"
 
 using namespace std;
 
@@ -27,7 +28,7 @@ public:
 	int get_degree(const T vertex);
 	DoublyLinkedList<T> get_all_vertices() const;
 	int num_vertices() const;
-	DoublyLinkedList<T> get_dijkstras(const T start, const T goal);
+	map<T, T> get_dijkstras(const T start, const T goal);
 	DoublyLinkedList<T> get_neighbors(const T vertex);
 	DoublyLinkedList<pair<int, T>> get_incoming(const T vertex);
 	DoublyLinkedList<pair<int, T>> get_outgoing(const T vertex);
@@ -138,7 +139,7 @@ void Graph<T>::remove_vertex(const T newVertex) {
 template<class T>
 DoublyLinkedList<T> Graph<T>::get_all_vertices() const {
 	DoublyLinkedList<T> vertexList;
-	for(map<T, DoublyLinkedList<pair<int, T>>>::iterator iter = AdjacencyList.begin(); iter != AdjacencyList.end(); ++iter) {
+	for(map<T, DoublyLinkedList<pair<int, T>>>::iterator iter = AdjacencyList.begin(); iter != AdjacencyList.end(); ++iter)
 		vertexList.Push_back(iter->first);
 	return vertexList;
 }
@@ -160,34 +161,35 @@ template<class T>
 int Graph<T>::num_vertices() const { return AdjacencyList.size(); }
 
 template<class T>
-DoublyLinkedList<T> Graph<T>::get_dijkstras(const T start, const T goal) {
+map<T, T> Graph<T>::get_dijkstras(const T start, const T goal) {
 	map<T, int> dist;
 	map<T, T> prev;
-	distance[start] = 0;	
+	dist[start] = 0;	
 	BinaryHeap<T> Q(MIN);
 	
 	for(map<T, DoublyLinkedList<pair<int, T>>>::iterator iter = AdjacencyList.begin(); iter != AdjacencyList.end(); ++iter) {
 		if (iter->first != start) {
-			dist[iter->first] = 99999;
+			dist[iter->first] = 999999; // supposed to be infinity
 			prev[iter->first] = T();
 		}
 		Q.insert(dist[iter->first], iter->first);
 	}
 	
-	while (!is_empty()) {
-		T currentVertex = Q.extract();
+	while (!Q.is_empty()) {
+		const T currentVertex = Q.extract().second;
 		DoublyLinkedList<T> neighbors = get_neighbors(currentVertex);
-		for (int i = 0; int i < neighbors.Get_size(); i++) {
+		for (int i = 0; i < neighbors.Get_size(); i++) {
 			T vertex = neighbors.Element_at(i);
 			int alt = dist[currentVertex] + get_weight(vertex, currentVertex);
-			if alt < (dist[currentVertex]) {
+			if (alt < dist[currentVertex]) {
 				dist[currentVertex] = alt;
 				prev[currentVertex] = vertex;
-				
+				// All elements share this key so this wont work
+				Q.modify_key(999999, alt); 
 			}
 		}
 	}
-	
+	return prev
 }
 
 // In Directed need to add Column and row elements
