@@ -218,7 +218,8 @@ template<class T>
 void DoublyLinkedList<T>::Push_front(T data) {
 	if (size > 0) {
 		Node<T>* newNode = new Node<T>(data, head, NULL);
-		head = newNode;
+		head->prev = newNode;
+		head = newNode;	
 	} else if (size == 0){
 		head = new Node<T>(data, NULL, NULL);
 		tail = head;

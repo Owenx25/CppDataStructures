@@ -28,7 +28,7 @@ public:
 	int get_degree(const T vertex);
 	DoublyLinkedList<T> get_all_vertices() const;
 	int num_vertices() const;
-	map<T, T> get_dijkstras(const T start, const T goal);
+	DoublyLinkedList<T> get_dijkstras(const T start, const T goal);
 	DoublyLinkedList<T> get_neighbors(const T vertex);
 	DoublyLinkedList<pair<int, T>> get_incoming(const T vertex);
 	DoublyLinkedList<pair<int, T>> get_outgoing(const T vertex);
@@ -162,7 +162,7 @@ template<class T>
 int Graph<T>::num_vertices() const { return AdjacencyList.size(); }
 
 template<class T>
-map<T, T> Graph<T>::get_dijkstras(const T start, const T goal) {
+DoublyLinkedList<T> Graph<T>::get_dijkstras(const T start, const T goal) {
 	map<T, int> dist;
 	map<T, T> prev;
 	dist[start] = 0;	
@@ -177,20 +177,31 @@ map<T, T> Graph<T>::get_dijkstras(const T start, const T goal) {
 	}
 	
 	while (!Q.is_empty()) {
-		const T currentVertex = Q.extract().Data();
+		HeapNode<T> hn = Q.extract();
+		const T currentVertex = hn.Data();
+		if (currentVertex == goal) 
+			break;
+		//throw runtime_error("CurrentVertex is " + currentVertex);
 		DoublyLinkedList<T> neighbors = get_neighbors(currentVertex);
 		for (int i = 0; i < neighbors.Get_size(); i++) {
 			T vertex = neighbors.Element_at(i);
 			int alt = dist[currentVertex] + get_weight(vertex, currentVertex);
-			if (alt < dist[currentVertex]) {
-				dist[currentVertex] = alt;
-				prev[currentVertex] = vertex;
-				// All elements share this key so this wont work
+			if (alt < dist[vertex]) {
 				Q.modify_key(dist[vertex], vertex, alt); 
+				dist[vertex] = alt;
+				prev[vertex] = currentVertex;
 			}
 		}
 	}
-	return prev;
+	
+	T vertex = goal;
+	DoublyLinkedList<T> finalPath;
+	while (vertex != start) {
+		finalPath.Push_front(vertex);
+		vertex = prev[vertex];
+	}
+	finalPath.Push_front(vertex);
+	return finalPath;
 }
 
 // In Directed need to add Column and row elements
@@ -218,7 +229,7 @@ int Graph<T>::get_degree(const T vertex) {
 template<class T>
 DoublyLinkedList<T> Graph<T>::get_neighbors(const T vertex) {
 	if (AdjacencyList.find(vertex) == AdjacencyList.end())
-		throw runtime_error("Cannot get neighbor, vertex does not exist");
+		throw runtime_error("Cannot get neighbor, vertex \"" + vertex + "\" does not exist");
 	// map holds all unique neighbors
 	map<T,T> uniqueVertices;
 	// Copy vertex neighbor's data into the map

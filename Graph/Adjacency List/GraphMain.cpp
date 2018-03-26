@@ -132,8 +132,18 @@ int main() {
 		D_graph.add_edge("C", "E", 1);
 		D_graph.add_edge("D", "E", 2);
 		D_graph.add_edge("D", "H", 1);
+		// write_neighbors("A", "Neighbors", D_graph.get_neighbors("A"));
+		// write_neighbors("B", "Neighbors", D_graph.get_neighbors("B"));
+		// write_neighbors("C", "Neighbors", D_graph.get_neighbors("C"));
+		// write_neighbors("D", "Neighbors", D_graph.get_neighbors("D"));
+		// write_neighbors("E", "Neighbors", D_graph.get_neighbors("E"));
+		// write_neighbors("F", "Neighbors", D_graph.get_neighbors("F"));
+		// write_neighbors("G", "Neighbors", D_graph.get_neighbors("G"));
+		// write_neighbors("H", "Neighbors", D_graph.get_neighbors("H"));
 		//Dijkstra's
-		D_graph.get_dijkstras("A", "D");
+		DoublyLinkedList<string> path = D_graph.get_dijkstras("A", "D");
+		for (int i = 0; i < path.Get_size(); i++)
+			cout << path.Element_at(i) << " ";
 	} catch (exception& e) {
 		cout << "Caught exception: " << e.what() << endl;
 	}

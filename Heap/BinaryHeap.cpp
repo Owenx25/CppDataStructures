@@ -91,38 +91,42 @@ HeapNode<T> BinaryHeap<T>::extract() {
 	HeapNode<T> oldData = tree.get_data(0);
 	tree.set_data(0, tree.get_data(tree.num_nodes() - 1));
 	tree.delete_node(tree.num_nodes() - 1);
+	//cout << "# Nodes: " << tree.num_nodes() << endl;
 	if (heapType == MAX)
 		max_heapify();
 	else
 		min_heapify();
 	return oldData;
 }
+
+// Both functions below take the head and move
+// it to its appropriate spot
 template<class T>
 void BinaryHeap<T>::max_heapify(int index = 0) {
-	int left = 2 * index + 1;
-	int right = 2 * index + 2;
+	int leftIndex = 2 * index + 1;
+	int rightIndex = 2 * index + 2;
 	int largest = index;
 	
-	if (left <= tree.num_nodes() && tree.get_data(left).Key() > tree.get_data(largest).Key())
-		largest = left;
-	if (right <= tree.num_nodes() && tree.get_data(right).Key() > tree.get_data(largest).Key())
-		largest = right;
+	if (tree.has_child(LEFT, index) && tree.get_data(leftIndex).Key() > tree.get_data(largest).Key())
+		largest = leftIndex;
+	if (tree.has_child(RIGHT, index) && tree.get_data(rightIndex).Key() > tree.get_data(largest).Key())
+		largest = rightIndex;
 	
 	if (largest != index) {
 		swap(index, largest);
-		max_heapify(largest);
+		min_heapify(largest);
 	}
 }
 template<class T>
 void BinaryHeap<T>::min_heapify(int index = 0) {
-	int left = 2 * index + 1;
-	int right = 2 * index + 2;
+	int leftIndex = 2 * index + 1;
+	int rightIndex = 2 * index + 2;
 	int smallest = index;
 	
-	if (left <= tree.num_nodes() && tree.get_data(left).Key() < tree.get_data(smallest).Key())
-		smallest = left;
-	if (right <= tree.num_nodes() && tree.get_data(right).Key() < tree.get_data(smallest).Key())
-		smallest = right;
+	if (tree.has_child(LEFT, index) && tree.get_data(leftIndex).Key() < tree.get_data(smallest).Key())
+		smallest = leftIndex;
+	if (tree.has_child(RIGHT, index) && tree.get_data(rightIndex).Key() < tree.get_data(smallest).Key())
+		smallest = rightIndex;
 	
 	if (smallest != index) {
 		swap(index, smallest);
@@ -204,7 +208,7 @@ int BinaryHeap<T>::search_tree(HeapNode<T> searchNode, int index = 0) {
 template<class T>
 void BinaryHeap<T>::modify_key(const HeapNode<T> node, int newKey) {
 	int keyIndex = find_node_index(node);
-	cout << "key index is " << keyIndex << endl;
+	//cout << "key index is " << keyIndex << endl;
 	tree.set_data(keyIndex, HeapNode<T>(newKey, tree.get_data(keyIndex).Data()));
 	while (true) {
 		if (tree.has_child(LEFT, keyIndex)) {
