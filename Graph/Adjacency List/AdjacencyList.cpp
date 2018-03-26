@@ -197,6 +197,8 @@ DoublyLinkedList<T> Graph<T>::get_dijkstras(const T start, const T goal) {
 	T vertex = goal;
 	DoublyLinkedList<T> finalPath;
 	while (vertex != start) {
+		if (prev.find(vertex) == prev.end())
+			throw runtime_error("No path can be found");
 		finalPath.Push_front(vertex);
 		vertex = prev[vertex];
 	}
