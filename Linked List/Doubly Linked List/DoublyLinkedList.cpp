@@ -37,6 +37,8 @@ class DoublyLinkedList {
 	T Back() const;
 	// get an element at a specific index
 	T Element_at(int index) const;
+	// Set an element at a particular index
+	void Set_element(int index, T data);
 	// check if empty
 	bool Is_empty() const;
 	// Insert a new node at an index
@@ -107,6 +109,18 @@ T DoublyLinkedList<T>::Element_at(int index) const {
 		return Back();
 	else
 		return Get_node_at(index)->data;
+}
+
+template<class T>
+void DoublyLinkedList<T>::Set_element(int index, T data) {
+	if (index < 0 || index >= size)
+		throw runtime_error("bad index in element_at()");
+	if (index == 0)
+		head->data = data;
+	else if (index == size - 1)
+		tail->data = data;
+	else
+		Get_node_at(index)->data = data;
 }
 
 template<class T>
