@@ -36,15 +36,15 @@ public:
 
 template<class T>
 Graph<T>::Graph(DoublyLinkedList<T> vertices, bool isDirected) : isDirected(isDirected) {
-	if (vertices.Is_empty())
+	if (vertices.is_empty())
 		throw runtime_error("Initializing graph with empty list of vertices");
 	// Graph starts with no edges defined
-	for (int i = 0; i < vertices.Get_size(); i++)
-		AdjacencyList[vertices.Element_at(i)] = DoublyLinkedList<pair<int, T>>();
+	for (int i = 0; i < vertices.size(); i++)
+		AdjacencyList[vertices.at(i)] = DoublyLinkedList<pair<int, T>>();
 }
 
 template<class T>
-int Graph<T>::bucket_size(const T vertex) { return AdjacencyList[vertex].Get_size(); }
+int Graph<T>::bucket_size(const T vertex) { return AdjacencyList[vertex].size(); }
 
 /* Exception Cases: 
 1) Weight > 0
@@ -58,7 +58,7 @@ void Graph<T>::add_edge(const T fromVertex, const T toVertex, const int weight) 
 	    AdjacencyList.find(toVertex) == AdjacencyList.end()) // Ex 2
 		throw runtime_error("Cannot add, one of the vertices does not exist");
 	for (int i = 0; i < bucket_size(fromVertex); i++) { // Ex 3
-		if (AdjacencyList[fromVertex].Element_at(i).second == toVertex)
+		if (AdjacencyList[fromVertex].at(i).second == toVertex)
 			throw runtime_error("Cannot add edge already present in graph");
 		// Making the assumption that an edge will never exist going one way in
 		// an undirected graph.
@@ -66,9 +66,9 @@ void Graph<T>::add_edge(const T fromVertex, const T toVertex, const int weight) 
 			// throw runtime_error("Cannot add edge already present in graph");
 	}
 	// Push_back new vertex
-	AdjacencyList[fromVertex].Push_back(make_pair(weight, toVertex));
+	AdjacencyList[fromVertex].push_back(make_pair(weight, toVertex));
 	if (!isDirected)
-		AdjacencyList[toVertex].Push_back(make_pair(weight, fromVertex));
+		AdjacencyList[toVertex].push_back(make_pair(weight, fromVertex));
 }
 
 // Make sure you remove from BOTH places
@@ -85,7 +85,7 @@ void Graph<T>::remove_edge(const T fromVertex, const T toVertex) {
 	int fromIndex = -1;
 	// Making same assumption from add_edge(if an undirected edge is in one place, its in both)
 	for (int i = 0; i < bucket_size(fromVertex); i++;) {
-		if (AdjacencyList[fromVertex].Element_at(i).second == toVertex) { 
+		if (AdjacencyList[fromVertex].at(i).second == toVertex) { 
 			edgePresent = true;
 			toIndex = i;
 		}
@@ -95,7 +95,7 @@ void Graph<T>::remove_edge(const T fromVertex, const T toVertex) {
 	if (!isDirected) {
 		edgePresent = false;
 		for (int i = 0; i < bucket_size(toVertex); i++;) {
-			if (AdjacencyList[toVertex].Element_at(i).second == fromVertex) { 
+			if (AdjacencyList[toVertex].at(i).second == fromVertex) { 
 				edgePresent = true;
 				fromIndex = i;
 			}
@@ -104,9 +104,9 @@ void Graph<T>::remove_edge(const T fromVertex, const T toVertex) {
 			throw runtime_error("Cannot remove, edge not present in graph");
 	}
 	
-	AdjacencyList[fromVertex].Delete_at(toIndex);
+	AdjacencyList[fromVertex].delete_at(toIndex);
 	if (!isDirected)
-		AdjacencyList[toVertex].Delete_at(fromIndex);
+		AdjacencyList[toVertex].delete_at(fromIndex);
 }
 
 template<class T>
@@ -124,15 +124,15 @@ void Graph<T>::remove_vertex(T delVertex) {
 	AdjacencyList.erase(delVertex);
 	for(map<T, DoublyLinkedList<pair<int, T>>>::iterator iter = AdjacencyList.begin(); iter != AdjacencyList.end(); ++iter) {
 		vector<int> deleteIndexes;
-		for(int i = 0; i < iter->second.Get_size(); i++) {
-			if (iter->second.Element_at(i).second == delVertex) {
+		for(int i = 0; i < iter->second.size(); i++) {
+			if (iter->second.at(i).second == delVertex) {
 				deleteIndexes.push_back(i);
 			}
 		}
 		for(vector<int>::const_iterator index_itr = deleteIndexes.begin(); index_itr != deleteIndexes.end(); ++index_itr) {
 			cout << "Deleting: " << *index_itr << "\nFrom List ";
-			cout << iter->first << "\nList Length: " << iter->second.Get_size()  << endl;
-			iter->second.Delete_at(*index_itr);
+			cout << iter->first << "\nList Length: " << iter->second.size()  << endl;
+			iter->second.delete_at(*index_itr);
 		}
 	}
 }
@@ -151,7 +151,7 @@ int Graph<T>::get_weight(const T fromVertex, const T toVertex) {
 	    AdjacencyList.find(toVertex) == AdjacencyList.end()) // Ex 1
 		throw runtime_error("Cannot get weight, one of the vertices does not exist");
 	for(int i = 0; i < bucket_size(fromVertex); i++) {
-		pair<int, T> element = AdjacencyList[fromVertex].Element_at(i);
+		pair<int, T> element = AdjacencyList[fromVertex].at(i);
 		if (element.second == toVertex)
 			return element.first;
 	}
@@ -183,8 +183,8 @@ DoublyLinkedList<T> Graph<T>::get_dijkstras(const T start, const T goal) {
 			break;
 		//throw runtime_error("CurrentVertex is " + currentVertex);
 		DoublyLinkedList<T> neighbors = get_neighbors(currentVertex);
-		for (int i = 0; i < neighbors.Get_size(); i++) {
-			T vertex = neighbors.Element_at(i);
+		for (int i = 0; i < neighbors.size(); i++) {
+			T vertex = neighbors.at(i);
 			int alt = dist[currentVertex] + get_weight(vertex, currentVertex);
 			if (alt < dist[vertex]) {
 				Q.modify_key(dist[vertex], vertex, alt); 
@@ -199,10 +199,10 @@ DoublyLinkedList<T> Graph<T>::get_dijkstras(const T start, const T goal) {
 	while (vertex != start) {
 		if (prev.find(vertex) == prev.end())
 			throw runtime_error("No path can be found");
-		finalPath.Push_front(vertex);
+		finalPath.push_front(vertex);
 		vertex = prev[vertex];
 	}
-	finalPath.Push_front(vertex);
+	finalPath.push_front(vertex);
 	return finalPath;
 }
 
@@ -212,13 +212,13 @@ int Graph<T>::get_degree(const T vertex) {
 	if (AdjacencyList.find(vertex) == AdjacencyList.end())
 		throw runtime_error("Cannot get degree, vertex does not exist");
 	if (!isDirected)
-		return AdjacencyList[vertex].Get_size();
+		return AdjacencyList[vertex].size();
 	else {
-		int degree = AdjacencyList[vertex].Get_size();
+		int degree = AdjacencyList[vertex].size();
 		for(map<T, DoublyLinkedList<pair<int, T>>>::iterator iter = AdjacencyList.begin(); iter != AdjacencyList.end(); ++iter) {
 			if (iter->first != vertex) {
-				for(int i = 0; i < iter->second.Get_size(); i++) {
-					if (iter->second.Element_at(i).second == vertex)
+				for(int i = 0; i < iter->second.size(); i++) {
+					if (iter->second.at(i).second == vertex)
 						degree++;
 				}
 			}
@@ -235,8 +235,8 @@ DoublyLinkedList<T> Graph<T>::get_neighbors(const T vertex) {
 	// map holds all unique neighbors
 	map<T,T> uniqueVertices;
 	// Copy vertex neighbor's data into the map
-	for (int i = 0; i < AdjacencyList[vertex].Get_size(); i++) {
-		const pair<int, T> element = AdjacencyList[vertex].Element_at(i);
+	for (int i = 0; i < AdjacencyList[vertex].size(); i++) {
+		const pair<int, T> element = AdjacencyList[vertex].at(i);
 		if (element.second != vertex && uniqueVertices.find(element.second) == uniqueVertices.end()) {
 			uniqueVertices[element.second] = element.second;
 		}
@@ -245,8 +245,8 @@ DoublyLinkedList<T> Graph<T>::get_neighbors(const T vertex) {
 	if (isDirected) {	
 		for(map<T, DoublyLinkedList<pair<int, T>>>::iterator iter = AdjacencyList.begin(); iter != AdjacencyList.end(); ++iter) {
 			if (iter->first != vertex) {
-				for(int i = 0; i < iter->second.Get_size(); i++) {
-					pair<int, T> element = iter->second.Element_at(i);
+				for(int i = 0; i < iter->second.size(); i++) {
+					pair<int, T> element = iter->second.at(i);
 					if (element.second == vertex && uniqueVertices.find(iter->first) == uniqueVertices.end())
 						uniqueVertices[iter->first] = iter->first;
 				}
@@ -256,7 +256,7 @@ DoublyLinkedList<T> Graph<T>::get_neighbors(const T vertex) {
 	// copy map into LL and return
 	DoublyLinkedList<T> returnCopy;
 	for(map<T, T>::iterator iter = uniqueVertices.begin(); iter != uniqueVertices.end(); ++iter)
-		returnCopy.Push_back(iter->first);
+		returnCopy.push_back(iter->first);
 	return returnCopy;
 }
 
@@ -273,8 +273,8 @@ DoublyLinkedList<pair<int, T>> Graph<T>::get_incoming(const T vertex) {
 	// Directed graphs need to check all the other lists
 	for(map<T, DoublyLinkedList<pair<int, T>>>::iterator iter = AdjacencyList.begin(); iter != AdjacencyList.end(); ++iter) {
 		// looping list inside of Vertex Element
-		for(int i = 0; i < iter->second.Get_size(); i++) {
-			pair<int, T> element = iter->second.Element_at(i);
+		for(int i = 0; i < iter->second.size(); i++) {
+			pair<int, T> element = iter->second.at(i);
 			if (element.second == vertex && uniqueVertices.find(iter->first) == uniqueVertices.end())
 				uniqueVertices[iter->first] = element.first;
 		}
@@ -282,7 +282,7 @@ DoublyLinkedList<pair<int, T>> Graph<T>::get_incoming(const T vertex) {
 	// copy map into LL and return
 	DoublyLinkedList<pair<int, T>> returnCopy;
 	for(map<T, int>::iterator iter = uniqueVertices.begin(); iter != uniqueVertices.end(); ++iter)
-		returnCopy.Push_back(make_pair(iter->second,iter->first));
+		returnCopy.push_back(make_pair(iter->second,iter->first));
 	return returnCopy;
 }
 template<class T>

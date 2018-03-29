@@ -9,15 +9,15 @@ using namespace std;
 
 void write_neighbors(string vertex, string operationName, DoublyLinkedList<string> list) {
 	cout << vertex << "'s " + operationName + ": { ";
-	for (int i = 0; i < list.Get_size(); i++)
-		cout << list.Element_at(i) << " ";
+	for (int i = 0; i < list.size(); i++)
+		cout << list.at(i) << " ";
 	cout << "}\n";
 }
 
 void write_directed(string vertex, string operationName, DoublyLinkedList<pair<int, string>> list) {
 	cout << vertex << "'s " + operationName + ": { ";
-	for (int i = 0; i < list.Get_size(); i++) {
-		const pair<int, string> element = list.Element_at(i);
+	for (int i = 0; i < list.size(); i++) {
+		const pair<int, string> element = list.at(i);
 		cout << element.second << ":";
 		cout << element.first << " ";
 	}
@@ -28,11 +28,11 @@ int main() {
 	try {
 		// Create Vertices
 		DoublyLinkedList<string> names;
-		names.Push_back("Abby");
-		names.Push_back("Ben");
-		names.Push_back("Carl");
-		names.Push_back("Daniel");
-		names.Push_back("Edward");
+		names.push_back("Abby");
+		names.push_back("Ben");
+		names.push_back("Carl");
+		names.push_back("Daniel");
+		names.push_back("Edward");
 		//Setup Graph
 		Graph<string> test(names, false);
 		test.add_edge("Abby", "Ben", 1);
@@ -73,11 +73,11 @@ int main() {
 	try {
 		// Create Vertices
 		DoublyLinkedList<string> vertices;
-		vertices.Push_back("A");
-		vertices.Push_back("B");
-		vertices.Push_back("C");
-		vertices.Push_back("D");
-		vertices.Push_back("E");
+		vertices.push_back("A");
+		vertices.push_back("B");
+		vertices.push_back("C");
+		vertices.push_back("D");
+		vertices.push_back("E");
 		// Setup Graph
 		Graph<string> directedTest(vertices, true);
 		directedTest.add_edge("A", "B", 1);
@@ -112,14 +112,14 @@ int main() {
 	try {
 		// Create Vertices
 		DoublyLinkedList<string> D_vertices;
-		D_vertices.Push_back("A");
-		D_vertices.Push_back("B");
-		D_vertices.Push_back("C");
-		D_vertices.Push_back("D");
-		D_vertices.Push_back("E");
-		D_vertices.Push_back("F");
-		D_vertices.Push_back("G");
-		D_vertices.Push_back("H");
+		D_vertices.push_back("A");
+		D_vertices.push_back("B");
+		D_vertices.push_back("C");
+		D_vertices.push_back("D");
+		D_vertices.push_back("E");
+		D_vertices.push_back("F");
+		D_vertices.push_back("G");
+		D_vertices.push_back("H");
 		// Setup graph
 		Graph<string> D_graph(D_vertices, false);
 		D_graph.add_edge("A", "G", 2);
@@ -142,8 +142,8 @@ int main() {
 		// write_neighbors("H", "Neighbors", D_graph.get_neighbors("H"));
 		//Dijkstra's
 		DoublyLinkedList<string> path = D_graph.get_dijkstras("A", "D");
-		for (int i = 0; i < path.Get_size(); i++)
-			cout << path.Element_at(i) << " ";
+		for (int i = 0; i < path.size(); i++)
+			cout << path.at(i) << " ";
 	} catch (exception& e) {
 		cout << "Caught exception: " << e.what() << endl;
 	}

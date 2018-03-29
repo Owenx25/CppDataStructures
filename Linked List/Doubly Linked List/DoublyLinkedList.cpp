@@ -26,35 +26,35 @@ class DoublyLinkedList {
 	// Last node in the list
 	Node<T>* tail;
 	// Size of the list
-	int size;
+	int size_;
 	// return node at specific index
 	Node<T>* Get_node_at(int index) const;
 	
 	public:
 	// get the front of the list
-	T Front() const;
+	T front() const;
 	// get the back of the list
-	T Back() const;
+	T back() const;
 	// get an element at a specific index
-	T Element_at(int index) const;
+	T at(int index) const;
 	// Set an element at a particular index
-	void Set_element(int index, T data);
+	void set(int index, T data);
 	// check if empty
-	bool Is_empty() const;
+	bool is_empty() const;
 	// Insert a new node at an index
-	Node<T>* Insert_at(int index, T data);
+	Node<T>* insert_at(int index, T data);
 	// Add Node to end of list
-	void Push_back(T data);
+	void push_back(T data);
 	// Add Node to start of list
-	void Push_front(T data);
+	void push_front(T data);
 	// Remove Node from start
-	void Pop_front();
+	void pop_front();
 	// Remove Node from end
-	void Pop_back();
+	void pop_back();
 	// Remove Node at an index
-	void Delete_at(int index);
+	void delete_at(int index);
 	// return size
-	int Get_size() const;
+	const int size() const;
 	// Default constructor
 	DoublyLinkedList();
 	// One Node Constructor
@@ -73,51 +73,51 @@ Node<T>::Node() {
 
 template<class T>
 DoublyLinkedList<T>::DoublyLinkedList(const DoublyLinkedList& copyList) {
-	this->size = 0;
-	for (int i = 0; i < copyList.Get_size(); i++)
-		this->Push_back(copyList.Element_at(i));
+	this->size_ = 0;
+	for (int i = 0; i < copyList.size(); i++)
+		this->push_back(copyList.at(i));
 }
 
 template<class T>
-int DoublyLinkedList<T>::Get_size() const{
-	return size;
+const int DoublyLinkedList<T>::size() const{
+	return size_;
 }
 
 template<class T>
-T DoublyLinkedList<T>::Front() const {
-	if (!Is_empty())
+T DoublyLinkedList<T>::front() const {
+	if (!is_empty())
 		return head->data;
 	else
 		throw runtime_error("Trying to Front() empty list");
 }
 
 template<class T>
-T DoublyLinkedList<T>::Back() const {
-	if (!Is_empty())
+T DoublyLinkedList<T>::back() const {
+	if (!is_empty())
 		return tail->data;
 	else
 		throw runtime_error("Trying to Back() empty list");
 }
 
 template<class T>
-T DoublyLinkedList<T>::Element_at(int index) const {
-	if (index < 0 || index >= size)
+T DoublyLinkedList<T>::at(int index) const {
+	if (index < 0 || index >= size())
 		throw runtime_error("bad index in element_at()");
 	if (index == 0)
-		return Front();
-	else if (index == size - 1)
-		return Back();
+		return front();
+	else if (index == size() - 1)
+		return back();
 	else
 		return Get_node_at(index)->data;
 }
 
 template<class T>
-void DoublyLinkedList<T>::Set_element(int index, T data) {
-	if (index < 0 || index >= size)
+void DoublyLinkedList<T>::set(int index, T data) {
+	if (index < 0 || index >= size())
 		throw runtime_error("bad index in element_at()");
 	if (index == 0)
 		head->data = data;
-	else if (index == size - 1)
+	else if (index == size() - 1)
 		tail->data = data;
 	else
 		Get_node_at(index)->data = data;
@@ -127,7 +127,7 @@ template<class T>
 DoublyLinkedList<T>::DoublyLinkedList() {
 	head = NULL;
 	tail = NULL;
-	size = 0;
+	size_ = 0;
 }
 
 template<class T>
@@ -145,25 +145,25 @@ template<class T>
 DoublyLinkedList<T>::DoublyLinkedList(Node<T>* newNode) {
 	head = newNode;
 	tail = newNode;
-	size = 1;
+	size_ = 1;
 }
 
 template<typename T>
 Node<T>::Node(T data, Node<T>* next, Node<T>* prev) : data(data), next(next), prev(prev) {}
 
 template<class T>
-bool DoublyLinkedList<T>::Is_empty() const{
-	return size == 0;
+bool DoublyLinkedList<T>::is_empty() const{
+	return size() == 0;
 }
 
 template<class T>
-void DoublyLinkedList<T>::Pop_front() {
-	if (!Is_empty()) {
+void DoublyLinkedList<T>::pop_front() {
+	if (!is_empty()) {
 		Node<T>* oldHead = head;
 		head = head->next;
-		if (size == 1)
+		if (size() == 1)
 			tail = NULL;
-		size--;
+		size_--;
 		delete oldHead;
 	}
 	else
@@ -171,8 +171,8 @@ void DoublyLinkedList<T>::Pop_front() {
 }
 
 template<class T>
-void DoublyLinkedList<T>::Pop_back() {
-	if (Is_empty())
+void DoublyLinkedList<T>::pop_back() {
+	if (is_empty())
 		throw runtime_error("Trying to pop_back empty list");
 	Node<T>* firstNode = head; 
 	if (firstNode->next == NULL) {
@@ -188,33 +188,33 @@ void DoublyLinkedList<T>::Pop_back() {
 }
 
 template<class T>
-void DoublyLinkedList<T>::Delete_at(int index) {
-	if (index < 0 || index >= size)
+void DoublyLinkedList<T>::delete_at(int index) {
+	if (index < 0 || index >= size())
 		throw runtime_error("Bad Index in Delete_at()");
 	if (index == 0)
-		Pop_front();
-	else if (index == size - 1)
-		Pop_back();
+		pop_front();
+	else if (index == size() - 1)
+		pop_back();
 	else {
 		Node<T>* beforeNode = Get_node_at(index - 1);
 		Node<T>* skipNode = beforeNode->next;
 		Node<T>* afterNode = skipNode->next;
 		beforeNode->next = afterNode;
 		afterNode->prev = beforeNode;
-		size--;
+		size_--;
 		delete skipNode;
 	}
 }
 
 template<class T>
-Node<T>* DoublyLinkedList<T>::Insert_at(int index, T data) {
-	if (index < 0 || index >= size)
+Node<T>* DoublyLinkedList<T>::insert_at(int index, T data) {
+	if (index < 0 || index >= size())
 		throw runtime_error("Bad Index in Insert_at()");
 	if (index == 0) {
-		Push_front(data);
+		push_front(data);
 		return head;
-	} else if (index == size - 1) {
-		Push_back(data);
+	} else if (index == size() - 1) {
+		push_back(data);
 		return tail;
 	} else {
 		Node<T>* beforeNode = Get_node_at(index - 1);
@@ -222,39 +222,39 @@ Node<T>* DoublyLinkedList<T>::Insert_at(int index, T data) {
 		Node<T>* newNode = new Node<T>(data, afterNode, beforeNode);
 		beforeNode->next = newNode;
 		afterNode->prev = newNode;
-		size++;
+		size_++;
 		return newNode;
 	}
 	return NULL;
 }
 
 template<class T>
-void DoublyLinkedList<T>::Push_front(T data) {
-	if (size > 0) {
+void DoublyLinkedList<T>::push_front(T data) {
+	if (size() > 0) {
 		Node<T>* newNode = new Node<T>(data, head, NULL);
 		head->prev = newNode;
 		head = newNode;	
-	} else if (size == 0){
+	} else if (size() == 0){
 		head = new Node<T>(data, NULL, NULL);
 		tail = head;
 	} else {
 		throw runtime_error("Invalid size of list");
 	}
-	size++;
+	size_++;
 }
 
 template<class T>
-void DoublyLinkedList<T>::Push_back(T data) {
-	if (size > 0) {
+void DoublyLinkedList<T>::push_back(T data) {
+	if (size() > 0) {
 		Node<T>* currNode = tail;
 		Node<T>* newNode = new Node<T>(data, NULL, currNode);
 		currNode->next = newNode;
 		tail = newNode;
-		size++;
-	} else if (size == 0){
+		size_++;
+	} else if (size() == 0){
 		head = new Node<T>(data, NULL, NULL);
 		tail = head;
-		size++;
+		size_++;
 	} else {
 		throw runtime_error("Invalid size of list");
 	}
@@ -262,22 +262,22 @@ void DoublyLinkedList<T>::Push_back(T data) {
 
 template<class T>
 Node<T>* DoublyLinkedList<T>::Get_node_at(int index) const{
-	if (Is_empty())
+	if (is_empty())
 		throw runtime_error("List is empty");
 	if (index == 0)
 		return head;
-	else if (index == size - 1)
+	else if (index == size() - 1)
 		return tail;
-	else if (index <= ((size - 1) / 2)) {
+	else if (index <= ((size() - 1) / 2)) {
 		Node<T>* tempNode = head;
 		for (int i = 0; i < index; i++)
 		{
 			tempNode = tempNode->next;
 		}
 		return tempNode;
-	} else if (index > ((size - 1) / 2)) {
+	} else if (index > ((size() - 1) / 2)) {
 		Node<T>* tempNode = tail;
-		for (int i = size - 1; i > index; i--)
+		for (int i = size() - 1; i > index; i--)
 		{
 			tempNode = tempNode->prev;
 		}

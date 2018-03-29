@@ -106,13 +106,13 @@ void BinaryTree<T>::Search_tree(TreeNode<T>* node, TraverseType type, LinkedList
 	if (node == NULL)
 		return;
 	if (type == TraverseType::PreOrder)
-		list->Push_back(node->data);
+		list->push_back(node->data);
 	Search_tree(node->childLeft, type, list);
 	if (type == TraverseType::InOrder)
-		list->Push_back(node->data);
+		list->push_back(node->data);
 	Search_tree(node->childRight, type, list);
 	if (type == TraverseType::PostOrder)
-		list->Push_back(node->data);
+		list->push_back(node->data);
 }
 
 // Insertion Functions

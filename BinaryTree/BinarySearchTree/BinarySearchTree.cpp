@@ -39,8 +39,8 @@ template<class T>
 void BST<T>::List_in_order() {
 	auto* list = tree.Get_in_order();
 	cout << "Inorder: { ";
-	for (int i = 0; i < list->Get_size(); i++)
-		cout << list->Element_at(i).second << " ";
+	for (int i = 0; i < list->size(); i++)
+		cout << list->at(i).second << " ";
 	cout << "}\n";
 }
 

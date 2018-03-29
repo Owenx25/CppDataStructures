@@ -11,14 +11,14 @@ class Queue {
 private:
 	DoublyLinkedList<T> list;
 public:
-	T Front() const;
-	T Back() const;
-	void Enqueue(T data);
-	void Dequeue();
-	int Get_size() const;
-	bool Is_empty() const;
+	T front() const;
+	T back() const;
+	void enqueue(T data);
+	void dequeue();
+	int size() const;
+	bool is_empty() const;
 	friend ostream& operator<<(ostream& os, const Queue<T>& q) {
-		os << "--> [" << q.Back() << " ... " << q.Front() << "] -->\n" ;
+		os << "--> [" << q.back() << " ... " << q.front() << "] -->\n" ;
 		return os;
 	}
 	
@@ -29,31 +29,31 @@ template<class T>
 Queue<T>::Queue() {}
 
 template<class T>
-void Queue<T>::Enqueue(T data) {
-	list.Push_back(data);
+void Queue<T>::enqueue(T data) {
+	list.push_back(data);
 }
 
 template<class T>
-void Queue<T>::Dequeue() {
-	list.Pop_front();
+void Queue<T>::dequeue() {
+	list.pop_front();
 }
 
 template<class T>
-int Queue<T>::Get_size() const {
-	return list.Get_size();
+int Queue<T>::size() const {
+	return list.size();
 }
 
 template<class T>
-bool Queue<T>::Is_empty() const{
-	return list.Is_empty();
+bool Queue<T>::is_empty() const{
+	return list.is_empty();
 }
 
 template<class T>
-T Queue<T>::Front() const{
-	return list.Front();
+T Queue<T>::front() const{
+	return list.front();
 }
 
 template<class T>
-T Queue<T>::Back() const{
-	return list.Back();
+T Queue<T>::back() const{
+	return list.back();
 }

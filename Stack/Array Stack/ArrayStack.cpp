@@ -26,7 +26,7 @@ Stack<T>::Stack(int capacity) : block(capacity), size(1) {}
 
 template <class T>
 void Stack<T>::Push(T data) {
-	if (size >= block.Get_size())
+	if (size >= block.Size())
 		throw runtime_error("Stack had reached max capacity");
 	block[size] = data;
 	size++;
