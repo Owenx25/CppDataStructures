@@ -1,0 +1,30 @@
+Hash Map
+=========
+- An array where any type of key can be mapped to any type of value using
+  a hash function
+  
+ ex. HashMap map
+	 Hash("One") --> 0
+	 Hash("Four") --> 3
+	 Hash("Of") --> 3
+	Key               Index    Data
+	===               =====    ====
+	"One"               0      "UNO" -> NULL
+	"Two", "Seven"      1      "DOS" -> "SEIS" -> NULL
+	"Three"             2      "TRES" -> NULL
+	"Four", "Of"        3      "CUATRO" -> "DE" -> NULL
+	"Five"              4      NULL
+	
+	map["One"] --> "UNO"
+	map["Two"] --> "DOS"
+	map["Four"] --> "CUATRO"
+	map["Seven"] --> "SEIS"
+
+- Storing and Indexing very quick O(1)
+- Only trouble comes from collisions
+	- A collision is when more the hash function returns the same index as another key in the table
+	- There are many ways of dealing with this, the most common is to put a linked list at each
+	  location in the map array
+- A hash table is only as strong as its hash function, generally you want a hash function
+  with uniform distribution, meaning most inputs have a unique output
+- As the buckets get larger in a hash table, the search time increases
