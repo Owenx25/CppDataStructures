@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <assert.h>
 #include "Array.cpp"
 
 using namespace std;
@@ -8,22 +9,22 @@ int main() {
 	// Test: Normal Int Array
 	// Expect: 1,2,3,4,5
 	Array<int> IntArr(5);
-	for (int i = 0; i < IntArr.Get_capacity(); i++)
+	for (int i = 0; i < IntArr.Size(); i++)
 	{
 		IntArr[i] = i;
 		cout << "[" << i << "] = " << IntArr[i] << endl;
 	}
-	cout << "size: " << IntArr.Get_capacity() << endl << endl;
+	assert(IntArr.Size() == 5);
 
 	// Test: Normal Double Array
 	// Expect some big double numbers
 	Array<double> DoubArr(20);
-	for (int i = 0; i < DoubArr.Get_capacity(); i++)
+	for (int i = 0; i < DoubArr.Size(); i++)
 	{
 		DoubArr[i] = i * 992012.32142;
 		cout << "[" << i << "] = " << DoubArr[i] << endl;
 	}	
-	cout << "size: " << DoubArr.Get_capacity() << endl << endl;
+	assert(DoubArr.Size() == 20);
 
 	// Test: Normal String Array
 	// Expect: "1","2","3","4","5"
@@ -33,7 +34,7 @@ int main() {
 		StringArr[i] = "\"" + to_string(i) + "\"";
 		cout << "[" << i << "] = " << StringArr[i] << endl;
 	}
-	cout << "size: " << StringArr.Get_capacity() << endl << endl;
+	assert(StringArr.Size() == 5);
 	
 	// Test: Invalid Index Access
 	// Expect: 2 Index out of range exceptions

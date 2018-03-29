@@ -22,27 +22,27 @@ class LinkedList {
 	// First node in the list
 	Node<T>* head;
 	// Size of the list
-	int size;
+	int size_;
 	
 	public:
 	// get the front of the list
-	T Front() const;
+	const T front() const;
 	// get an element at a specific index
-	T Element_at(int index) const;
+	const T at(const int index) const;
 	// check if empty
-	bool Is_empty() const;
+	const bool is_empty() const;
 	// Insert a new node at an index
-	Node<T>* Insert_at(int index, T data);
+	Node<T>* insert_at(const int index, const T data);
 	// Add Node to end of list
-	Node<T>* Push_back(T data);
+	Node<T>* push_back(const T data);
 	// Add Node to start of list
-	void Push_front(T data);
+	void push_front(const T data);
 	// Remove Node from start
-	void Pop_front();
+	void pop_front();
 	// Remove Node at an index
-	void Delete_at(int index);
+	void delete_at(const int index);
 	// return size
-	int Get_size() const;
+	const int size() const;
 	// Default constructor
 	LinkedList();
 	// One Node Constructor
@@ -61,32 +61,32 @@ Node<T>::Node() {
 
 template<class T>
 LinkedList<T>::LinkedList(const LinkedList& copyList) {
-	size = 0;
-	for (int i = 0; i < copyList.Get_size(); i++)
+	size_ = 0;
+	for (int i = 0; i < copyList.size(); i++)
 	{
-		this->Push_back(copyList.Element_at(i));
+		this->push_back(copyList.at(i));
 	}
 }
 
 template<class T>
-int LinkedList<T>::Get_size() const{
-	return size;
+const int LinkedList<T>::size() const{
+	return size_;
 }
 
 template<class T>
-T LinkedList<T>::Front() const {
-	if (!Is_empty())
+const T LinkedList<T>::front() const {
+	if (!is_empty())
 		return head->data;
 	else
 		throw runtime_error("Trying to Front() empty list");
 }
 
 template<class T>
-T LinkedList<T>::Element_at(int index) const {
-	if (index < 0 || index >= size)
+const T LinkedList<T>::at(const int index) const {
+	if (index < 0 || index >= size())
 		throw runtime_error("bad index in element_at()");
 	if (index == 0)
-		return Front();
+		return front();
 	else {
 		Node<T>* tempNode = head;
 		for (int i = 0; i < index; i++)
@@ -100,7 +100,7 @@ T LinkedList<T>::Element_at(int index) const {
 template<class T>
 LinkedList<T>::LinkedList() {
 	head = NULL;
-	size = 0;
+	size_ = 0;
 }
 
 template<class T>
@@ -117,7 +117,7 @@ LinkedList<T>::~LinkedList() {
 template<class T>
 LinkedList<T>::LinkedList(Node<T>* newNode) {
 	head = newNode;
-	size = 1;
+	size_ = 1;
 }
 
 template<typename T>
@@ -127,16 +127,16 @@ Node<T>::Node(T data, Node<T>* next) {
 }
 
 template<class T>
-bool LinkedList<T>::Is_empty() const{
+const bool LinkedList<T>::is_empty() const{
 	return head == NULL;
 }
 
 template<class T>
-void LinkedList<T>::Pop_front() {
-	if (!Is_empty()) {
+void LinkedList<T>::pop_front() {
+	if (!is_empty()) {
 		Node<T>* oldHead = head;
 		head = head->next;
-		size--;
+		size_--;
 		delete oldHead;
 	}
 	else
@@ -144,11 +144,11 @@ void LinkedList<T>::Pop_front() {
 }
 
 template<class T>
-void LinkedList<T>::Delete_at(int index) {
-	if (index < 0 || index >= size)
+void LinkedList<T>::delete_at(int index) {
+	if (index < 0 || index >= size())
 		throw runtime_error("Bad Index in Insert_at()");
 	if (index == 0)
-		Pop_front();
+		pop_front();
 	else
 	{
 		Node<T>* currNode = head;
@@ -156,17 +156,17 @@ void LinkedList<T>::Delete_at(int index) {
 			currNode = head->next;
 		Node<T>* skipNode = currNode->next;
 		currNode->next = skipNode->next;
-		size--;
+		size_--;
 		delete skipNode;
 	}
 }
 
 template<class T>
-Node<T>* LinkedList<T>::Insert_at(int index, T data) {
-	if (index < 0 || index >= size)
+Node<T>* LinkedList<T>::insert_at(int index, T data) {
+	if (index < 0 || index >= size())
 		throw runtime_error("Bad Index in Insert_at()");
 	if (index == 0)
-		Push_front(data);
+		push_front(data);
 	else {
 		Node<T>* currNode = head;
 		for (int i = 0; i < index - 1; ++i)
@@ -174,38 +174,38 @@ Node<T>* LinkedList<T>::Insert_at(int index, T data) {
 		// Should be 1 before where we want to insert
 		Node<T>* newNode = new Node<T>(data, currNode->next);
 		currNode->next = newNode;
-		size++;
+		size_++;
 		return newNode;
 	}
 	return head;
 }
 
 template<class T>
-void LinkedList<T>::Push_front(T data) {
-	if (size > 0) {
+void LinkedList<T>::push_front(T data) {
+	if (size() > 0) {
 		Node<T>* newNode = new Node<T>(data, head);
 		head = newNode;
-	} else if (size == 0){
+	} else if (size() == 0){
 		head = new Node<T>(data, NULL);
 	} else {
 		throw runtime_error("Invalid size of list");
 	}
-	size++;
+	size_++;
 }
 
 template<class T>
-Node<T>* LinkedList<T>::Push_back(T data) {
-	if (size > 0) {
+Node<T>* LinkedList<T>::push_back(T data) {
+	if (size() > 0) {
 		Node<T>* currNode = head;
 		Node<T>* newNode = new Node<T>(data, NULL);
 		while (currNode->next != NULL)
 			currNode = currNode->next;
 		currNode->next = newNode;
-		size++;
+		size_++;
 		return newNode;
-	} else if (size == 0){
+	} else if (size() == 0){
 		head = new Node<T>(data, NULL);
-		size++;
+		size_++;
 		return head;
 	} else {
 		throw runtime_error("Invalid size of list");

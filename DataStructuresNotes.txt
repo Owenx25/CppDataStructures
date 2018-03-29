@@ -30,6 +30,7 @@ Implemented Structures:
 - BST
 - Binary Heap/Priority Queue
 - Graph (Adjacency Matrix, Adjacency List)
+- HashTable (Using std::Hash, Not all Types supported)
 
 Other TODO:
 - Add a copy constructor for every DS

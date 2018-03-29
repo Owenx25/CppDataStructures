@@ -6,14 +6,14 @@ using namespace std;
 template <class T>
 class Array{
 	private:
-		int capacity;
+		int size_;
 		T* startptr;
 		Array();
 	public:
 		~Array();
-		Array(int capacity);
-		T& operator[](const int index) const;
-		int Get_capacity() const;
+		Array(const int size);
+		T& operator[](int index) const;
+		int Size() const;
 };
 
 template<class T>
@@ -21,7 +21,7 @@ Array<T>::Array(int capacity)
 {
 	if (capacity <= 0)
 		throw runtime_error("invalid init size");
-	this->capacity = capacity;
+	size_ = capacity;
 	startptr = new T[capacity];
 	while (--capacity)
 		startptr[capacity] = T();
@@ -30,7 +30,7 @@ Array<T>::Array(int capacity)
 }
 
 template<class T>
-int Array<T>::Get_capacity() const{ return capacity; }
+int Array<T>::Size() const{ return size_; }
 
 template<class T>
 Array<T>::Array()
@@ -42,9 +42,8 @@ Array<T>::Array()
 template<class T>
 T& Array<T>::operator[](const int index) const
 {
-	if (index >= capacity || index < 0)
+	if (index >= size_ || index < 0)
 		throw runtime_error("Index out of range");
-
 	return startptr[index];
 }
 
@@ -52,5 +51,5 @@ template<class T>
 Array<T>::~Array()
 {
 	delete[] startptr;
-	startptr = 0;
+	startptr = nullptr;
 }
