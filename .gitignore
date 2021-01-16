@@ -30,3 +30,7 @@
 *.exe
 *.out
 *.app
+
+Algorithms/Graphs/__pycache__
+Algorithms/Sorting/__pycache__
+*.pyc
